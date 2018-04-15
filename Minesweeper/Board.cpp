@@ -50,9 +50,10 @@ unsigned short cBoard::countBombsAround(unsigned short x, unsigned short y)
 
 void cBoard::startAutoDetecting(unsigned short x, unsigned short y)
 {
-	if (_square[x * _height + y].getBomb())
+	if (_square[x * _height + y].getBomb() || !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		_square[x * _height + y].click(countBombsAround(x, y));
-	autoDetecting(x, y);
+	else
+		autoDetecting(x, y);
 }
 
 void cBoard::autoDetecting(unsigned short x, unsigned short y)
