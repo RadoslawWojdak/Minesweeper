@@ -2,11 +2,13 @@
 
 #include <SFML\Graphics.hpp>
 
+enum eStatus { unrevealed, revealed, flagged, questioned };
+
 class cSquare
 {
 	static sf::Font _font;
 
-	enum eStatus { unrevealed, revealed, flagged, questioned } _status;
+	eStatus _status;
 	sf::RectangleShape _square;
 	sf::Text _bombsNumber;
 	bool _bomb;
@@ -26,6 +28,7 @@ public:
 	bool getBomb();
 	void setBomb();
 	sf::RectangleShape getRect();
+	eStatus getStatus();
 
 	void display(sf::RenderWindow &win);
 };

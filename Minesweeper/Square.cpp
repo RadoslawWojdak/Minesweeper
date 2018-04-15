@@ -138,6 +138,11 @@ sf::RectangleShape cSquare::getRect()
 	return _square;
 }
 
+eStatus cSquare::getStatus()
+{
+	return _status;
+}
+
 void cSquare::display(sf::RenderWindow &win)
 {
 	win.draw(_square);

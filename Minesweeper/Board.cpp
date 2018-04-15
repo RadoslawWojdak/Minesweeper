@@ -27,25 +27,66 @@ unsigned short cBoard::countBombsAround(unsigned short x, unsigned short y)
 		if (y > 0)
 			sum += _square[(x - 1) * _height + y - 1].getBomb();
 		sum += _square[(x - 1) * _height + y].getBomb();
-		if (y < _height)
+		if (y < _height - 1)
 			sum += _square[(x - 1) * _height + y + 1].getBomb();
 	}
 
 	if (y > 0)
 		sum += _square[x * _height + y - 1].getBomb();
-	if (y < _height)
+	if (y < _height - 1)
 		sum += _square[x * _height + y + 1].getBomb();
 
-	if (x < _width)
+	if (x < _width - 1)
 	{
 		if (y > 0)
 			sum += _square[(x + 1) * _height + y - 1].getBomb();
 		sum += _square[(x + 1) * _height + y].getBomb();
-		if (y < _height)
+		if (y < _height - 1)
 			sum += _square[(x + 1) * _height + y + 1].getBomb();
 	}
 
 	return sum;
+}
+
+void cBoard::startAutoDetecting(unsigned short x, unsigned short y)
+{
+	if (_square[x * _height + y].getBomb())
+		_square[x * _height + y].click(countBombsAround(x, y));
+	autoDetecting(x, y);
+}
+
+void cBoard::autoDetecting(unsigned short x, unsigned short y)
+{
+	if((_square[x * _height + y].getStatus() == unrevealed || _square[x * _height + y].getStatus() == questioned) && !_square[x * _height + y].getBomb())
+	{
+		_square[x * _height + y].click(countBombsAround(x, y));
+
+		if (countBombsAround(x, y) == 0)
+		{
+			if (x > 0)
+			{
+				if (y > 0)
+					autoDetecting(x - 1, y - 1);
+				autoDetecting(x - 1, y);
+				if (y < _height - 1)
+					autoDetecting(x - 1, y + 1);
+			}
+
+			if (y > 0)
+				autoDetecting(x, y - 1);
+			if (y < _height - 1)
+				autoDetecting(x, y + 1);
+
+			if (x < _width - 1)
+			{
+				if (y > 0)
+					autoDetecting(x + 1, y - 1);
+				autoDetecting(x + 1, y);
+				if (y < _height - 1)
+					autoDetecting(x + 1, y + 1);
+			}
+		}
+	}
 }
 
 cBoard::cBoard(unsigned short width, unsigned short height, unsigned short bombs)
@@ -96,9 +137,7 @@ void cBoard::checkMouse(sf::RenderWindow &win)
 				if (p->getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
 				{
 					unsigned short id = (p - _square);
-					unsigned short bombsAround = countBombsAround(id / _height, id % _height);
-
-					p->click(bombsAround);
+					startAutoDetecting(id / _height, id % _height);
 
 					break;
 				}

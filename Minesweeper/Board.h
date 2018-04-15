@@ -10,6 +10,8 @@ class cBoard
 
 	void randBombs(unsigned short number);
 	unsigned short countBombsAround(unsigned short x, unsigned short y);
+	void startAutoDetecting(unsigned short x, unsigned short y);
+	void autoDetecting(unsigned short x, unsigned short y);
 
 public:
 	cBoard(unsigned short width, unsigned short height, unsigned short bombs);
