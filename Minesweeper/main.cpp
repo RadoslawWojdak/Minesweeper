@@ -1,11 +1,12 @@
 #include <SFML\Graphics.hpp>
+#include <iostream>
 #include "Board.h"
 
 int main()
 {
 	sf::RenderWindow mainWindow(sf::VideoMode(800, 600), "Minesweeper");
 
-	cBoard board(30, 30, 100);
+	cBoard board(30, 30, 25);
 
 	while (mainWindow.isOpen())
 	{
@@ -20,6 +21,18 @@ int main()
 		}
 	
 		//Actions
+		if (board.isGameOver())
+		{
+#ifdef _DEBUG
+			if (board.isBombRevealed())
+				std::cout << "Defeat!\n";
+			else
+				std::cout << "Victory!\n";
+			system("PAUSE");
+#endif
+			break;
+		}
+
 		board.checkMouse(mainWindow);
 		
 		//Graphics

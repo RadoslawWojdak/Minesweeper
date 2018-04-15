@@ -39,9 +39,7 @@ void cSquare::refreshStatus(unsigned short bombsAround)
 		if (_bomb)
 			_square.setFillColor(sf::Color(0, 0, 0));
 		else if (!bombsAround)
-		{
 			_square.setFillColor(sf::Color(191, 191, 191));
-		}
 		else
 		{
 			_square.setFillColor(sf::Color(255, 255, 255));
