@@ -10,7 +10,11 @@ class cSquare :public sf::RectangleShape
 	void displayStatus();
 
 public:
+	cSquare() {};
 	cSquare(unsigned short x, unsigned short y);
 
 	void click();
+
+	bool getBomb();
+	void setBomb();
 };

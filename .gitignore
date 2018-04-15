@@ -240,3 +240,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Minesweeper/Minesweeper.sln
+/Minesweeper/Minesweeper.vcxproj
+/Minesweeper/Minesweeper.vcxproj.filters

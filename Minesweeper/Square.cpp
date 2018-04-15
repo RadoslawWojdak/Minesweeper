@@ -75,3 +75,13 @@ void cSquare::click()
 
 	displayStatus();
 }
+
+bool cSquare::getBomb()
+{
+	return _bomb;
+}
+
+void cSquare::setBomb()
+{
+	_bomb = true;
+}
