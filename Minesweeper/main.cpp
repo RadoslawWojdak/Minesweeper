@@ -6,7 +6,7 @@ int main()
 {
 	sf::RenderWindow mainWindow(sf::VideoMode(800, 600), "Minesweeper");
 
-	Board board(30, 30, 1000);
+	Board board(30, 30, 100);
 
 	while (mainWindow.isOpen())
 	{

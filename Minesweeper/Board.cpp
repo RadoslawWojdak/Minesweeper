@@ -27,10 +27,7 @@ Board::Board(unsigned short width, unsigned short height, unsigned short bombs)
 	for (unsigned short  i = 0; i < width; ++i)
 	{
 		for (unsigned short  j = 0; j < height; ++j)
-		{
-			*p = cSquare(i, j);
-			++p;
-		}
+			*p++ = cSquare(i, j);
 	}
 
 	if (width * height > bombs)
@@ -54,21 +51,19 @@ Board::~Board()
 void Board::checkMouse(sf::RenderWindow &win)
 {
 	static bool click = true;
-	cSquare* p = _square;
-
+	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) || sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
 		if (!click)
 		{
 			click = true;
-			for (int i = 0; i < _size; ++i)
+			for (cSquare* p = _square; p < _square + _size * sizeof(cSquare); p++)
 			{
 				if (p->getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
 				{
 					p->click();
 					break;
 				}
-				++p;
 			}
 		}
 	}
@@ -80,8 +75,5 @@ void Board::display(sf::RenderWindow &win)
 {
 	cSquare* p = _square;
 	for (int i = 0; i < _size; ++i)
-	{
-		win.draw(*p);
-		++p;
-	}
+		win.draw(*p++);
 }
