@@ -18,9 +18,10 @@ class cBoard
 	void autoDetecting(unsigned short x, unsigned short y);
 	unsigned int countCheckedSquares();
 	void clearSquareChecked();
+	void adjustWindowSize(sf::RenderWindow &win, unsigned short squareSize);
 
 public:
-	cBoard(unsigned short width, unsigned short height, unsigned short bombs);
+	cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
 	~cBoard();
 
 	void checkMouse(sf::RenderWindow &win);

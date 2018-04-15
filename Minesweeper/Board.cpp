@@ -2,6 +2,7 @@
 
 #include <ctime>
 #include <iostream>
+#include <cmath>
 
 bool* cBoard::_squareChecked;
 
@@ -132,7 +133,14 @@ void cBoard::clearSquareChecked()
 		*p = false;
 }
 
-cBoard::cBoard(unsigned short width, unsigned short height, unsigned short bombs)
+void cBoard::adjustWindowSize(sf::RenderWindow &win, unsigned short squareSize)
+{
+	if (win.isOpen())
+		win.close();
+	win.create(sf::VideoMode(squareSize * _width, squareSize * _height + 32), "Minesweeper");
+}
+
+cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
 {
 	_width = width;
 	_height = height;
@@ -143,11 +151,19 @@ cBoard::cBoard(unsigned short width, unsigned short height, unsigned short bombs
 	_square = new cSquare[_size];
 	_squareChecked = new bool[_size];
 
+	//Create a window and array of squares
+	unsigned short squareSize = 16;
+	adjustWindowSize(win, squareSize);
+
+	sf::Vector2f boardStartPos;
+	boardStartPos.x = win.getSize().x / 2 - (squareSize * width) / 2;
+	boardStartPos.y = 32;
+
 	cSquare* p = _square;
-	for (unsigned short  i = 0; i < height; ++i)
+	for (unsigned short  i = 0; i < width; ++i)
 	{
-		for (unsigned short  j = 0; j < width; ++j)
-			*p++ = cSquare(i, j);
+		for (unsigned short  j = 0; j < height; ++j)
+			*p++ = cSquare(i, j, boardStartPos, squareSize);
 	}
 
 	if (width * height > bombs)

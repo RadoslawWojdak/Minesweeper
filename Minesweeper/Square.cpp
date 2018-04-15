@@ -56,21 +56,19 @@ void cSquare::refreshStatus(unsigned short bombsAround)
 	}
 }
 
-cSquare::cSquare(unsigned short x, unsigned short y)
+cSquare::cSquare(unsigned short x, unsigned short y, sf::Vector2f startPos, unsigned short size)
 {
-	const sf::Vector2f START_DRAW_POS = sf::Vector2f(0, 0);
-	const int SIZE = 16;
 	const double THICK = 1.0f;
 	
-	_square.setSize(sf::Vector2f(SIZE, SIZE));
+	_square.setSize(sf::Vector2f(size - THICK * 2, size - THICK * 2));
 	_square.setOutlineThickness(THICK);
 	_square.setOutlineColor(sf::Color(128, 128, 128));
-	_square.setOrigin(SIZE / 2, SIZE / 2);
+	_square.setOrigin(size / 2, size / 2);
 
 	_square.setPosition
 	(
-		START_DRAW_POS.x + THICK + _square.getOrigin().x + x * (SIZE + THICK * 2),
-		START_DRAW_POS.y + THICK + _square.getOrigin().y + y * (SIZE + THICK * 2)
+		startPos.x + THICK + _square.getOrigin().x + x * size,
+		startPos.y + THICK + _square.getOrigin().y + y * size
 	);
 
 	_status = unrevealed;

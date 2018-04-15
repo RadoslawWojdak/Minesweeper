@@ -21,7 +21,7 @@ class cSquare
 public:
 
 	cSquare() {};
-	cSquare(unsigned short x, unsigned short y);
+	cSquare(unsigned short x, unsigned short y, sf::Vector2f startPos, unsigned short size);
 
 	void click(unsigned short bombsAround);
 
