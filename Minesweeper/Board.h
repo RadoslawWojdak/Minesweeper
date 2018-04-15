@@ -2,16 +2,18 @@
 
 #include "Square.h"
 
-class Board
+class cBoard
 {
 	cSquare* _square;
 	unsigned int _size;
+	unsigned short _width, _height;
 
 	void randBombs(unsigned short number);
+	unsigned short countBombsAround(unsigned short x, unsigned short y);
 
 public:
-	Board(unsigned short width, unsigned short height, unsigned short bombs);
-	~Board();
+	cBoard(unsigned short width, unsigned short height, unsigned short bombs);
+	~cBoard();
 
 	void checkMouse(sf::RenderWindow &win);
 	void display(sf::RenderWindow &win);

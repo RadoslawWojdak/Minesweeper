@@ -1,12 +1,11 @@
 #include <SFML\Graphics.hpp>
-#include <vector>
 #include "Board.h"
 
 int main()
 {
 	sf::RenderWindow mainWindow(sf::VideoMode(800, 600), "Minesweeper");
 
-	Board board(30, 30, 100);
+	cBoard board(30, 30, 100);
 
 	while (mainWindow.isOpen())
 	{

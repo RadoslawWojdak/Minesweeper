@@ -1,51 +1,98 @@
 #include "Square.h"
 
-cSquare::cSquare(unsigned short x, unsigned short y)
+#include <iostream>
+
+sf::Font cSquare::_font;
+
+bool cSquare::init()
 {
-	const sf::Vector2f START_DRAW_POS = sf::Vector2f(0, 0);
-	const int SIZE = 16;
-	
-	this->setSize(sf::Vector2f(SIZE, SIZE));
-	this->setOutlineThickness(1.0f);
-	this->setOutlineColor(sf::Color(128, 128, 128));
-	this->setOrigin(SIZE / 2, SIZE / 2);
+	if (!_font.loadFromFile("font.ttf"))
+	{
+#ifdef _DEBUG
+		std::cerr << "ERROR: File \"arial.ttf\" not found!\n";
+#endif
+		return false;
+	}
 
-	int thick = getOutlineThickness();
-	this->setPosition
-	(
-		START_DRAW_POS.x + thick + getOrigin().x + x * (SIZE + thick * 2),
-		START_DRAW_POS.y + thick + getOrigin().y + y * (SIZE + thick * 2)
-	);
-
-	_status = unrevealed;
-	_bomb = false;
+	return true;
 }
 
-void cSquare::displayStatus()
+void cSquare::setBombsNumber(unsigned short bombsAround)
+{
+	char buffer[2];
+	_itoa_s(bombsAround, buffer, 2, 10);
+	_bombsNumber.setString(buffer[0]);
+
+	_bombsNumber.setOrigin((int)_bombsNumber.getGlobalBounds().width, (int)_bombsNumber.getGlobalBounds().height);
+	_bombsNumber.setPosition(_square.getPosition());
+}
+
+void cSquare::refreshStatus(unsigned short bombsAround)
 {
 	switch (_status)
 	{
 	case unrevealed:
-		setFillColor(sf::Color(255, 255, 255));
+		_square.setFillColor(sf::Color(255, 255, 255));
 		break;
 	case revealed:
 	{
 		if (_bomb)
-			setFillColor(sf::Color(0, 0, 0));
+			_square.setFillColor(sf::Color(0, 0, 0));
 		else
-			setFillColor(sf::Color(0, 0, 255));
+		{
+			_square.setFillColor(sf::Color(255, 255, 255));
+			setBombsNumber(bombsAround);
+		}
 		break;
 	}
 	case flagged:
-		setFillColor(sf::Color(255, 0, 0));
+		_square.setFillColor(sf::Color(255, 0, 0));
 		break;
 	case questioned:
-		setFillColor(sf::Color(0, 255, 0));
+		_square.setFillColor(sf::Color(0, 255, 0));
 		break;
 	}
 }
 
-void cSquare::click()
+cSquare::cSquare(unsigned short x, unsigned short y)
+{
+	const sf::Vector2f START_DRAW_POS = sf::Vector2f(0, 0);
+	const int SIZE = 16;
+	const double THICK = 1.0f;
+	
+	_square.setSize(sf::Vector2f(SIZE, SIZE));
+	_square.setOutlineThickness(THICK);
+	_square.setOutlineColor(sf::Color(128, 128, 128));
+	_square.setOrigin(SIZE / 2, SIZE / 2);
+
+	_square.setPosition
+	(
+		START_DRAW_POS.x + THICK + _square.getOrigin().x + x * (SIZE + THICK * 2),
+		START_DRAW_POS.y + THICK + _square.getOrigin().y + y * (SIZE + THICK * 2)
+	);
+
+	_status = unrevealed;
+	_bomb = false;
+
+	static bool init = false;
+	if (!init)
+	{
+		init = true;
+		if (!cSquare::init())
+		{
+#ifdef _DEBUG
+			std::cerr << "ERROR: Square init error!\n";
+			system("PAUSE");
+#endif
+			exit(2);
+		}
+	}
+	_bombsNumber.setFont(_font);
+	_bombsNumber.setFillColor(sf::Color::Black);
+	_bombsNumber.setCharacterSize(12);
+}
+
+void cSquare::click(unsigned short bombsAround)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
@@ -73,7 +120,7 @@ void cSquare::click()
 		}
 	}
 
-	displayStatus();
+	refreshStatus(bombsAround);
 }
 
 bool cSquare::getBomb()
@@ -84,4 +131,15 @@ bool cSquare::getBomb()
 void cSquare::setBomb()
 {
 	_bomb = true;
+}
+
+sf::RectangleShape cSquare::getRect()
+{
+	return _square;
+}
+
+void cSquare::display(sf::RenderWindow &win)
+{
+	win.draw(_square);
+	win.draw(_bombsNumber);
 }
