@@ -17,7 +17,7 @@ class cBoard
 	void randBombs(unsigned short clickX, unsigned short clickY);
 	void randomizeBombs(unsigned short clickX, unsigned short clickY);
 	unsigned short countBombsAround(unsigned short x, unsigned short y);
-	void startAutoDetecting(unsigned short x, unsigned short y, cTimer &timer);
+	void startAutoDetecting(unsigned short x, unsigned short y, sf::Mouse::Button buttonReleased, cTimer &timer);
 	void autoDetecting(unsigned short x, unsigned short y);
 	unsigned int countCheckedSquares();
 	void clearSquareChecked();
@@ -27,7 +27,7 @@ public:
 	cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
 	~cBoard();
 
-	void checkMouse(sf::RenderWindow &win, cTimer &timer);
+	void checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer);
 	void display(sf::RenderWindow &win);
 
 	bool isBombRevealed();

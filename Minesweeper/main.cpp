@@ -20,9 +20,21 @@ int main()
 			{
 				mainWindow.close();
 			}
+			if (e.type == sf::Event::MouseButtonReleased)
+			{
+				board.checkMouse(mainWindow, e.mouseButton.button, timer);
+			}
 		}
-	
-		//Actions
+		
+		//Graphics
+		mainWindow.clear(sf::Color(191, 191, 191));
+
+		board.display(mainWindow);
+		timer.display(mainWindow);
+
+		mainWindow.display();
+
+		//If game is over - behind graphics displaying to display the last square change
 		if (board.isGameOver())
 		{
 #ifdef _DEBUG
@@ -34,16 +46,6 @@ int main()
 #endif
 			break;
 		}
-
-		board.checkMouse(mainWindow, timer);
-		
-		//Graphics
-		mainWindow.clear(sf::Color(191, 191, 191));
-
-		board.display(mainWindow);
-		timer.display(mainWindow);
-
-		mainWindow.display();
 	}
 
 	return 0;

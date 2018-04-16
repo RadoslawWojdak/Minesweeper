@@ -67,15 +67,15 @@ unsigned short cBoard::countBombsAround(unsigned short x, unsigned short y)
 	return sum;
 }
 
-void cBoard::startAutoDetecting(unsigned short x, unsigned short y, cTimer &timer)
+void cBoard::startAutoDetecting(unsigned short x, unsigned short y, sf::Mouse::Button buttonReleased, cTimer &timer)
 {
-	if (!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	if (!buttonReleased == sf::Mouse::Button::Left)
 	{
-		_square[x * _height + y].click(countBombsAround(x, y));
+		_square[x * _height + y].click(countBombsAround(x, y), buttonReleased);
 	}
 	else if (_square[x * _height + y].getBomb())
 	{
-		_square[x * _height + y].click(countBombsAround(x, y));
+		_square[x * _height + y].click(countBombsAround(x, y), buttonReleased);
 		if (_square[x * _height + y].getStatus() == revealed)
 		{
 			_hitBomb = true;
@@ -97,7 +97,7 @@ void cBoard::startAutoDetecting(unsigned short x, unsigned short y, cTimer &time
 		for (int i = 0; i < _size; i++)
 		{
 			if (_squareChecked[i])
-				_square[i].click(countBombsAround(i / _height, i % _height));
+				_square[i].click(countBombsAround(i / _height, i % _height), buttonReleased);
 		}
 	}
 
@@ -197,32 +197,23 @@ cBoard::~cBoard()
 	delete[] _squareChecked;
 }
 
-void cBoard::checkMouse(sf::RenderWindow &win, cTimer &timer)
+void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer)
 {
-	static bool click = true;
-	
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle) || sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (buttonReleased == sf::Mouse::Left || buttonReleased == sf::Mouse::Middle || buttonReleased == sf::Mouse::Right)
 	{
-		if (!click)
+		cSquare *p = _square;
+		for (int i = 0; i < _size; ++i)
 		{
-			click = true;
-			
-			cSquare *p = _square;
-			for (int i = 0; i < _size; ++i)
+			if (p->getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
 			{
-				if (p->getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
-				{
-					unsigned short id = (p - _square);
-					startAutoDetecting(id / _height, id % _height, timer);
+				unsigned short id = (p - _square);
+				startAutoDetecting(id / _height, id % _height, buttonReleased, timer);
 
-					break;
-				}
-				++p;
+				break;
 			}
+			++p;
 		}
 	}
-	else
-		click = false;
 }
 
 void cBoard::display(sf::RenderWindow &win)
