@@ -1,19 +1,16 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
+#include "Text.h"
 
 enum eStatus { unrevealed, revealed, flagged, questioned };
 
 class cSquare
 {
-	static sf::Font _font;
-
 	eStatus _status;
 	sf::RectangleShape _square;
-	sf::Text _bombsNumber;
+	cText _bombsNumber;
 	bool _bomb;
-
-	static bool init();
 
 	void setBombsNumber(unsigned short bombsAround);
 	void refreshStatus(unsigned short bombsAround);

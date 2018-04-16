@@ -1,17 +1,15 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
+#include "Text.h"
 
 class cTimer
 {
-	static sf::Font _font;
-
-	sf::Text _text;
+	cText _text;
 	sf::Clock _clock;
 	unsigned int _millisecond;
 	bool _paused;
 
-	bool init();
 	void refreshText(sf::RenderWindow &win);
 	void assignTime();
 

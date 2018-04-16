@@ -2,7 +2,6 @@
 
 #include <ctime>
 #include <iostream>
-#include <cmath>
 
 bool* cBoard::_squareChecked;
 
@@ -31,8 +30,7 @@ void cBoard::randomizeBombs(unsigned short clickX, unsigned short clickY)
 		std::cerr << "ERROR: The number of bombs is greater than or equal to the size of the cBoard!\n";
 		system("PAUSE");
 #endif
-		delete[] _square;
-		delete[] _squareChecked;
+		deletePointers();
 		exit(1);
 	}
 }
@@ -216,10 +214,16 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 		cSquare *p = _square;
 		for (int i = 0; i < _size; ++i)
 		{
+			eStatus status = p->getStatus();
 			if (p->getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
 			{
 				unsigned short id = (p - _square);
 				startAutoDetecting(id / _height, id % _height, buttonReleased, timer);
+
+				if (status != p->getStatus() && p->getStatus() == flagged)
+					++_flaggedBombs;
+				else if (status == flagged && p->getStatus() != flagged)
+					--_flaggedBombs;
 
 				break;
 			}
@@ -234,6 +238,7 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short
 	_height = height;
 	_size = width * height;
 	_bombs = bombs;
+	_flaggedBombs = 0;
 	_hitBomb = false;
 	_gameOver = false;
 	_firstClick = false;
@@ -262,6 +267,16 @@ void cBoard::display(sf::RenderWindow &win, bool gameOver)
 	cSquare* p = _square;
 	for (int i = 0; i < _size; ++i)
 		p++->display(win, gameOver);
+}
+
+unsigned int cBoard::getBombs()
+{
+	return _bombs;
+}
+
+unsigned int cBoard::countFlaggedBombs()
+{
+	return _flaggedBombs;
 }
 
 bool cBoard::isBombRevealed()

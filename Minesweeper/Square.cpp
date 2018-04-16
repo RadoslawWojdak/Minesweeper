@@ -1,30 +1,8 @@
 #include "Square.h"
 
-#include <iostream>
-
-sf::Font cSquare::_font;
-
-bool cSquare::init()
-{
-	if (!_font.loadFromFile("font.ttf"))
-	{
-#ifdef _DEBUG
-		std::cerr << "ERROR: File \"arial.ttf\" not found!\n";
-#endif
-		return false;
-	}
-
-	return true;
-}
-
 void cSquare::setBombsNumber(unsigned short bombsAround)
 {
-	char buffer[2];
-	_itoa_s(bombsAround, buffer, 2, 10);
-	_bombsNumber.setString(buffer[0]);
-
-	_bombsNumber.setOrigin((int)_bombsNumber.getGlobalBounds().width, (int)_bombsNumber.getGlobalBounds().height);
-	_bombsNumber.setPosition(_square.getPosition());
+	_bombsNumber.setString(bombsAround);
 }
 
 void cSquare::refreshStatus(unsigned short bombsAround)
@@ -76,22 +54,7 @@ cSquare::cSquare(unsigned short x, unsigned short y, sf::Vector2f startPos, unsi
 	_status = unrevealed;
 	_bomb = false;
 
-	static bool init = false;
-	if (!init)
-	{
-		init = true;
-		if (!cSquare::init())
-		{
-#ifdef _DEBUG
-			std::cerr << "ERROR: Square init error!\n";
-			system("PAUSE");
-#endif
-			exit(2);
-		}
-	}
-	_bombsNumber.setFont(_font);
-	_bombsNumber.setFillColor(sf::Color::Black);
-	_bombsNumber.setCharacterSize((int)(size * 0.8f));
+	_bombsNumber = cText(_square.getPosition(), "", (int)size * 0.8f, sf::Color::Black);
 }
 
 void cSquare::click(unsigned short bombsAround, sf::Mouse::Button buttonReleased)

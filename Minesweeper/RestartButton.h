@@ -1,18 +1,15 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
+#include "Text.h"
 
 class cRestartButton
 {
-	static sf::Font _font;
-
 	sf::RectangleShape _rect;
-	sf::Text _text;
-
-	bool init();
+	cText _text;
 
 public:
-	cRestartButton(sf::Vector2i pos, unsigned short size);
+	cRestartButton(sf::Vector2f pos, unsigned short size);
 	
 	bool click(sf::RenderWindow &win, sf::Mouse::Button button);
 

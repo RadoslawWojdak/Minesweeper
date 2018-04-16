@@ -11,6 +11,7 @@ class cBoard
 	unsigned int _size;
 	unsigned short _width, _height;
 	unsigned int _bombs;
+	unsigned int _flaggedBombs;
 	bool _hitBomb, _gameOver;
 	bool _firstClick;
 
@@ -34,6 +35,8 @@ public:
 	void newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
 	void display(sf::RenderWindow &win, bool gameOver);
 
+	unsigned int getBombs();
+	unsigned int countFlaggedBombs();
 	bool isBombRevealed();
 	bool isGameOver();
 };
