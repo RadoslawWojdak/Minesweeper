@@ -158,9 +158,16 @@ void cBoard::clearSquareChecked()
 
 void cBoard::adjustWindowSize(sf::RenderWindow &win, unsigned short squareSize)
 {
-	if (win.isOpen())
-		win.close();
-	win.create(sf::VideoMode(squareSize * _width, squareSize * _height + 32), "Minesweeper", sf::Style::Close);
+	sf::Vector2u winSize;
+	winSize.x = squareSize * _width;
+	winSize.y = squareSize * _height + 32;
+
+	if (win.getSize() != winSize)
+	{
+		if (win.isOpen())
+			win.close();
+		win.create(sf::VideoMode(winSize.x, winSize.y), "Minesweeper", sf::Style::Close);
+	}
 }
 
 unsigned short cBoard::adjustSquareToResolution()
