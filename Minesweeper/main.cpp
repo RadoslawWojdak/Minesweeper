@@ -8,11 +8,12 @@ int main()
 {
 	sf::RenderWindow mainWindow(sf::VideoMode(800, 600), "Minesweeper", sf::Style::Close);
 
+	cBoard board;
 	cTimer timer(mainWindow);
 
 	while (mainWindow.isOpen())
 	{
-		cBoard board(mainWindow, 30, 30, 100);
+		board.newGame(mainWindow, 30, 30, 100);
 		cRestartButton restartButton(sf::Vector2i(mainWindow.getSize().x / 2, 16), 24);
 
 		bool closeGame = false;

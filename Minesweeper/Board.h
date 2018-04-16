@@ -22,12 +22,16 @@ class cBoard
 	unsigned int countCheckedSquares();
 	void clearSquareChecked();
 	void adjustWindowSize(sf::RenderWindow &win, unsigned short squareSize);
+	unsigned short adjustSquareToResolution();
+	void deletePointers();
 
 public:
+	cBoard() {};
 	cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
 	~cBoard();
 
 	void checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer);
+	void newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
 	void display(sf::RenderWindow &win, bool gameOver);
 
 	bool isBombRevealed();

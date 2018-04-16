@@ -163,19 +163,8 @@ void cBoard::adjustWindowSize(sf::RenderWindow &win, unsigned short squareSize)
 	win.create(sf::VideoMode(squareSize * _width, squareSize * _height + 32), "Minesweeper", sf::Style::Close);
 }
 
-cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
+unsigned short cBoard::adjustSquareToResolution()
 {
-	_width = width;
-	_height = height;
-	_size = width * height;
-	_bombs = bombs;
-	_hitBomb = false;
-	_gameOver = false;
-	_firstClick = false;
-	_square = new cSquare[_size];
-	_squareChecked = new bool[_size];
-
-	//Create a window and array of squares
 	sf::Vector2i screenResolution;
 	screenResolution.x = sf::VideoMode::getDesktopMode().width;
 	screenResolution.y = sf::VideoMode::getDesktopMode().height;
@@ -186,25 +175,31 @@ cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short heigh
 	if (squareSize * _height + 32 > screenResolution.y)	//Not "else if" - still can be too big
 		squareSize = screenResolution.y / _height;
 
+	return squareSize;
+}
 
-	adjustWindowSize(win, squareSize);
-
-	sf::Vector2f boardStartPos;
-	boardStartPos.x = win.getSize().x / 2 - (squareSize * width) / 2;
-	boardStartPos.y = 32;
-
-	cSquare* p = _square;
-	for (unsigned short  i = 0; i < width; ++i)
+void cBoard::deletePointers()
+{
+	if (_square != NULL)
 	{
-		for (unsigned short  j = 0; j < height; ++j)
-			*p++ = cSquare(i, j, boardStartPos, squareSize);
+		delete[] _square;
+		_square = NULL;
 	}
+	if (_squareChecked != NULL)
+	{
+		delete[] _squareChecked;
+		_squareChecked = NULL;
+	}
+}
+
+cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
+{
+	newGame(win, width, height, bombs);
 }
 
 cBoard::~cBoard()
 {
-	delete[] _square;
-	delete[] _squareChecked;
+	deletePointers();
 }
 
 void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer)
@@ -223,6 +218,35 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 			}
 			++p;
 		}
+	}
+}
+
+void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
+{
+	_width = width;
+	_height = height;
+	_size = width * height;
+	_bombs = bombs;
+	_hitBomb = false;
+	_gameOver = false;
+	_firstClick = false;
+
+	deletePointers();
+	_square = new cSquare[_size];
+	_squareChecked = new bool[_size];
+
+	unsigned short squareSize = adjustSquareToResolution();
+	adjustWindowSize(win, squareSize);
+
+	sf::Vector2f boardStartPos;
+	boardStartPos.x = win.getSize().x / 2 - (squareSize * width) / 2;
+	boardStartPos.y = 32;
+
+	cSquare* p = _square;
+	for (unsigned short i = 0; i < width; ++i)
+	{
+		for (unsigned short j = 0; j < height; ++j)
+			*p++ = cSquare(i, j, boardStartPos, squareSize);
 	}
 }
 
