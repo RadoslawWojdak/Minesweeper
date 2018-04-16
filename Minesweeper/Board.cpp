@@ -6,18 +6,34 @@
 
 bool* cBoard::_squareChecked;
 
-void cBoard::randBombs(unsigned short number)
+void cBoard::randBombs(unsigned short clickX, unsigned short clickY)
 {
 	srand(time(NULL));
 
-	for (unsigned short i = 0; i < number;)
+	for (unsigned short i = 0; i < _bombs;)
 	{
 		int rnd = rand() % _size;
-		if (!_square[rnd].getBomb())
+		if (!_square[rnd].getBomb() && (clickX * _height + clickY != rnd))
 		{
 			_square[rnd].setBomb();
 			++i;
 		}
+	}
+}
+
+void cBoard::randomizeBombs(unsigned short clickX, unsigned short clickY)
+{
+	if (_width * _height > _bombs)
+		randBombs(clickX, clickY);
+	else	//Delete when the GUI is added
+	{
+#ifdef _DEBUG
+		std::cerr << "ERROR: The number of bombs is greater than or equal to the size of the cBoard!\n";
+		system("PAUSE");
+#endif
+		delete[] _square;
+		delete[] _squareChecked;
+		exit(1);
 	}
 }
 
@@ -51,7 +67,7 @@ unsigned short cBoard::countBombsAround(unsigned short x, unsigned short y)
 	return sum;
 }
 
-void cBoard::startAutoDetecting(unsigned short x, unsigned short y)
+void cBoard::startAutoDetecting(unsigned short x, unsigned short y, cTimer &timer)
 {
 	if (!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
@@ -68,6 +84,13 @@ void cBoard::startAutoDetecting(unsigned short x, unsigned short y)
 	}
 	else
 	{
+		if (!_firstClick)
+		{
+			_firstClick = true;
+			randomizeBombs(x, y);
+			timer.start();
+		}
+
 		clearSquareChecked();
 		autoDetecting(x, y);
 
@@ -148,6 +171,7 @@ cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short heigh
 	_bombs = bombs;
 	_hitBomb = false;
 	_gameOver = false;
+	_firstClick = false;
 	_square = new cSquare[_size];
 	_squareChecked = new bool[_size];
 
@@ -165,19 +189,6 @@ cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short heigh
 		for (unsigned short  j = 0; j < height; ++j)
 			*p++ = cSquare(i, j, boardStartPos, squareSize);
 	}
-
-	if (width * height > bombs)
-		randBombs(bombs);
-	else	//Delete when the GUI is added
-	{
-#ifdef _DEBUG
-		std::cerr << "ERROR: The number of bombs is greater than or equal to the size of the cBoard!\n";
-		system("PAUSE");
-#endif
-		delete[] _square;
-		delete[] _squareChecked;
-		exit(1);
-	}
 }
 
 cBoard::~cBoard()
@@ -186,7 +197,7 @@ cBoard::~cBoard()
 	delete[] _squareChecked;
 }
 
-void cBoard::checkMouse(sf::RenderWindow &win)
+void cBoard::checkMouse(sf::RenderWindow &win, cTimer &timer)
 {
 	static bool click = true;
 	
@@ -202,7 +213,7 @@ void cBoard::checkMouse(sf::RenderWindow &win)
 				if (p->getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
 				{
 					unsigned short id = (p - _square);
-					startAutoDetecting(id / _height, id % _height);
+					startAutoDetecting(id / _height, id % _height, timer);
 
 					break;
 				}

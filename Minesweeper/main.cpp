@@ -7,8 +7,8 @@ int main()
 {
 	sf::RenderWindow mainWindow(sf::VideoMode(800, 600), "Minesweeper", sf::Style::Close);
 
-	cBoard board(mainWindow, 30, 30, 500);
-	cTimer timer;
+	cBoard board(mainWindow, 30, 30, 100);
+	cTimer timer(mainWindow);
 
 	while (mainWindow.isOpen())
 	{
@@ -35,7 +35,7 @@ int main()
 			break;
 		}
 
-		board.checkMouse(mainWindow);
+		board.checkMouse(mainWindow, timer);
 		
 		//Graphics
 		mainWindow.clear(sf::Color(191, 191, 191));

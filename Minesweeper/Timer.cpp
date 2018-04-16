@@ -46,6 +46,19 @@ cTimer::cTimer()
 	_text.setFillColor(sf::Color(65, 65, 65));
 	_text.setCharacterSize(24);
 	_text.setString("0");
+	_started = false;
+}
+
+
+cTimer::cTimer(sf::RenderWindow &win) :cTimer()
+{
+	refreshText(win);
+}
+
+void cTimer::start()
+{
+	_started = true;
+	restart();
 }
 
 void cTimer::restart()
@@ -60,6 +73,7 @@ sf::Time cTimer::getTime()
 
 void cTimer::display(sf::RenderWindow &win)
 {
-	refreshText(win);
+	if (_started)
+		refreshText(win);
 	win.draw(_text);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Square.h"
+#include "Timer.h"
 
 class cBoard
 {
@@ -11,10 +12,12 @@ class cBoard
 	unsigned short _width, _height;
 	unsigned int _bombs;
 	bool _hitBomb, _gameOver;
+	bool _firstClick;
 
-	void randBombs(unsigned short number);
+	void randBombs(unsigned short clickX, unsigned short clickY);
+	void randomizeBombs(unsigned short clickX, unsigned short clickY);
 	unsigned short countBombsAround(unsigned short x, unsigned short y);
-	void startAutoDetecting(unsigned short x, unsigned short y);
+	void startAutoDetecting(unsigned short x, unsigned short y, cTimer &timer);
 	void autoDetecting(unsigned short x, unsigned short y);
 	unsigned int countCheckedSquares();
 	void clearSquareChecked();
@@ -24,7 +27,7 @@ public:
 	cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
 	~cBoard();
 
-	void checkMouse(sf::RenderWindow &win);
+	void checkMouse(sf::RenderWindow &win, cTimer &timer);
 	void display(sf::RenderWindow &win);
 
 	bool isBombRevealed();
