@@ -176,7 +176,17 @@ cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short heigh
 	_squareChecked = new bool[_size];
 
 	//Create a window and array of squares
+	sf::Vector2i screenResolution;
+	screenResolution.x = sf::VideoMode::getDesktopMode().width;
+	screenResolution.y = sf::VideoMode::getDesktopMode().height;
+
 	unsigned short squareSize = 16;
+	if (squareSize * _width > screenResolution.x)
+		squareSize = screenResolution.x / _width;
+	if (squareSize * _height + 32 > screenResolution.y)	//Not "else if" - still can be too big
+		squareSize = screenResolution.y / _height;
+
+
 	adjustWindowSize(win, squareSize);
 
 	sf::Vector2f boardStartPos;

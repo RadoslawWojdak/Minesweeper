@@ -58,17 +58,19 @@ void cSquare::refreshStatus(unsigned short bombsAround)
 
 cSquare::cSquare(unsigned short x, unsigned short y, sf::Vector2f startPos, unsigned short size)
 {
-	const double THICK = 1.0f;
-	
-	_square.setSize(sf::Vector2f(size - THICK * 2, size - THICK * 2));
-	_square.setOutlineThickness(THICK);
+	double thick = 1.0f;
+	if (size < 8)
+		thick = 0.5f;
+
+	_square.setSize(sf::Vector2f(size - thick * 2, size - thick * 2));
+	_square.setOutlineThickness(thick);
 	_square.setOutlineColor(sf::Color(128, 128, 128));
 	_square.setOrigin(size / 2, size / 2);
 
 	_square.setPosition
 	(
-		startPos.x + THICK + _square.getOrigin().x + x * size,
-		startPos.y + THICK + _square.getOrigin().y + y * size
+		startPos.x + thick + _square.getOrigin().x + x * size,
+		startPos.y + thick + _square.getOrigin().y + y * size
 	);
 
 	_status = unrevealed;
@@ -89,7 +91,7 @@ cSquare::cSquare(unsigned short x, unsigned short y, sf::Vector2f startPos, unsi
 	}
 	_bombsNumber.setFont(_font);
 	_bombsNumber.setFillColor(sf::Color::Black);
-	_bombsNumber.setCharacterSize(12);
+	_bombsNumber.setCharacterSize((int)(size * 0.8f));
 }
 
 void cSquare::click(unsigned short bombsAround, sf::Mouse::Button buttonReleased)
