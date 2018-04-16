@@ -28,7 +28,7 @@ public:
 	~cBoard();
 
 	void checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer);
-	void display(sf::RenderWindow &win);
+	void display(sf::RenderWindow &win, bool gameOver);
 
 	bool isBombRevealed();
 	bool isGameOver();

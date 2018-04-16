@@ -30,5 +30,5 @@ public:
 	sf::RectangleShape getRect();
 	eStatus getStatus();
 
-	void display(sf::RenderWindow &win);
+	void display(sf::RenderWindow &win, bool gameOver);
 };

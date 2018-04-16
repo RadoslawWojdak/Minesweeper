@@ -216,11 +216,11 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 	}
 }
 
-void cBoard::display(sf::RenderWindow &win)
+void cBoard::display(sf::RenderWindow &win, bool gameOver)
 {
 	cSquare* p = _square;
 	for (int i = 0; i < _size; ++i)
-		p++->display(win);
+		p++->display(win, gameOver);
 }
 
 bool cBoard::isBombRevealed()

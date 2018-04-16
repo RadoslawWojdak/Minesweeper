@@ -143,11 +143,11 @@ eStatus cSquare::getStatus()
 	return _status;
 }
 
-void cSquare::display(sf::RenderWindow &win)
+void cSquare::display(sf::RenderWindow &win, bool gameOver)
 {
 	if (_status == unrevealed || _status == questioned)
 	{
-		if (getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
+		if (getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y) && !gameOver)
 		{
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 				_square.setFillColor(sf::Color(196, 196, 196));
