@@ -137,7 +137,7 @@ void cBoard::adjustWindowSize(sf::RenderWindow &win, unsigned short squareSize)
 {
 	if (win.isOpen())
 		win.close();
-	win.create(sf::VideoMode(squareSize * _width, squareSize * _height + 32), "Minesweeper");
+	win.create(sf::VideoMode(squareSize * _width, squareSize * _height + 32), "Minesweeper", sf::Style::Close);
 }
 
 cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)

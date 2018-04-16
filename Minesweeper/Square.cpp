@@ -42,16 +42,16 @@ void cSquare::refreshStatus(unsigned short bombsAround)
 			_square.setFillColor(sf::Color(191, 191, 191));
 		else
 		{
-			_square.setFillColor(sf::Color(255, 255, 255));
+			_square.setFillColor(sf::Color(223, 223, 223));
 			setBombsNumber(bombsAround);
 		}
 		break;
 	}
 	case flagged:
-		_square.setFillColor(sf::Color(255, 0, 0));
+		_square.setFillColor(sf::Color(223, 0, 0));
 		break;
 	case questioned:
-		_square.setFillColor(sf::Color(0, 255, 0));
+		_square.setFillColor(sf::Color(0, 223, 0));
 		break;
 	}
 }
