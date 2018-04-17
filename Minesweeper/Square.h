@@ -24,6 +24,7 @@ public:
 
 	bool getBomb();
 	void setBomb();
+	sf::Vector2f getSize();
 	sf::RectangleShape getRect();
 	eStatus getStatus();
 

@@ -211,24 +211,17 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 {
 	if (buttonReleased == sf::Mouse::Left || buttonReleased == sf::Mouse::Middle || buttonReleased == sf::Mouse::Right)
 	{
-		cSquare *p = _square;
-		for (int i = 0; i < _size; ++i)
-		{
-			eStatus status = p->getStatus();
-			if (p->getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y))
-			{
-				unsigned short id = (p - _square);
-				startAutoDetecting(id / _height, id % _height, buttonReleased, timer);
+		sf::Vector2i selectedSquare = getMouseSquare(win);
 
-				if (status != p->getStatus() && p->getStatus() == flagged)
-					++_flaggedBombs;
-				else if (status == flagged && p->getStatus() != flagged)
-					--_flaggedBombs;
+		cSquare square = _square[selectedSquare.x * _height + selectedSquare.y];
+		eStatus status = square.getStatus();
 
-				break;
-			}
-			++p;
-		}
+		startAutoDetecting(selectedSquare.x, selectedSquare.y, buttonReleased, timer);
+
+		if (status != square.getStatus() && square.getStatus() == flagged)
+			++_flaggedBombs;
+		else if (status == flagged && square.getStatus() != flagged)
+			--_flaggedBombs;
 	}
 }
 
@@ -250,15 +243,14 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short
 	unsigned short squareSize = adjustSquareToResolution();
 	adjustWindowSize(win, squareSize);
 
-	sf::Vector2f boardStartPos;
-	boardStartPos.x = win.getSize().x / 2 - (squareSize * width) / 2;
-	boardStartPos.y = 32;
+	_startPosition.x = win.getSize().x / 2 - (squareSize * width) / 2;
+	_startPosition.y = 32;
 
 	cSquare* p = _square;
 	for (unsigned short i = 0; i < width; ++i)
 	{
 		for (unsigned short j = 0; j < height; ++j)
-			*p++ = cSquare(i, j, boardStartPos, squareSize);
+			*p++ = cSquare(i, j, _startPosition, squareSize);
 	}
 }
 
@@ -277,6 +269,16 @@ unsigned int cBoard::getBombs()
 unsigned int cBoard::countFlaggedBombs()
 {
 	return _flaggedBombs;
+}
+
+sf::Vector2i cBoard::getMouseSquare(sf::RenderWindow &win)
+{
+	sf::Vector2i mp = sf::Mouse::getPosition(win);
+	sf::Vector2i selectedSquare;
+	selectedSquare.x = (mp.x - _startPosition.x) / _square[0].getSize().x;
+	selectedSquare.y = (mp.y - _startPosition.y) / _square[0].getSize().y;
+
+	return selectedSquare;
 }
 
 bool cBoard::isBombRevealed()

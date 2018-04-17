@@ -8,6 +8,7 @@ class cBoard
 	static bool* _squareChecked;	//Checks whether the square has already been checked in the autoDetecting function
 
 	cSquare* _square;
+	sf::Vector2f _startPosition;
 	unsigned int _size;
 	unsigned short _width, _height;
 	unsigned int _bombs;
@@ -37,6 +38,7 @@ public:
 
 	unsigned int getBombs();
 	unsigned int countFlaggedBombs();
+	sf::Vector2i getMouseSquare(sf::RenderWindow &win);
 	bool isBombRevealed();
 	bool isGameOver();
 };

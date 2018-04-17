@@ -98,6 +98,15 @@ void cSquare::setBomb()
 	_bomb = true;
 }
 
+sf::Vector2f cSquare::getSize()
+{
+	sf::Vector2f size;
+	size.x = _square.getSize().x + _square.getOutlineThickness() * 2;
+	size.y = _square.getSize().y + _square.getOutlineThickness() * 2;
+	
+	return size;
+}
+
 sf::RectangleShape cSquare::getRect()
 {
 	return _square;
