@@ -10,6 +10,7 @@ int main()
 	if (!cText::init())
 	{
 		cMessageBox errorMBox("Error 2 - Text init failed!", "Text init failed!");	//The description won't displayed becauese there is no font
+		errorMBox.show();
 		return 2;
 	}
 
@@ -19,7 +20,10 @@ int main()
 	
 	while (mainWindow.isOpen())
 	{
-		board.newGame(mainWindow, 30, 30, 100);
+		cMessageBox sizeMBox("Board size", "Enter the size of the board", MB_3TEXTBOXES);
+		unsigned short* size = sizeMBox.show().textBox;
+
+		board.newGame(mainWindow, size[0], size[1], size[2]);
 
 		cTimer timer(mainWindow);
 		cRestartButton restartButton(sf::Vector2f(mainWindow.getSize().x / 2, 16), 24);
@@ -81,6 +85,7 @@ int main()
 					mBoxDescription = "Victory!";
 
 				cMessageBox gameEndingMBox("GAME OVER", mBoxDescription);
+				gameEndingMBox.show();
 				winLoseDisplayed = true;
 			}
 		}

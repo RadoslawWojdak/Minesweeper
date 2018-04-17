@@ -14,4 +14,5 @@ public:
 
 	void setString(int number);
 	void setString(const sf::String &string);
+	int getNumber();
 };

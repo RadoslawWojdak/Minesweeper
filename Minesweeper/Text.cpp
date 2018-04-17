@@ -45,3 +45,8 @@ void cText::setString(const sf::String &string)
 	Text::setString(string);
 	this->setOriginInCenter();
 }
+
+int cText::getNumber()
+{
+	return atoi(Text::getString().toAnsiString().c_str());
+}

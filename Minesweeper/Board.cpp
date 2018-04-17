@@ -27,6 +27,7 @@ void cBoard::randomizeBombs(unsigned short clickX, unsigned short clickY)
 	else	//Delete when the GUI is added
 	{
 		cMessageBox errorMBox("Error 1", "The number of bombs is greater than or equal to the size of the cBoard!");
+		errorMBox.show();
 		deletePointers();
 		exit(1);
 	}
@@ -255,7 +256,7 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short
 	_square = new cSquare[_size];
 	_squareChecked = new bool[_size];
 
-	unsigned short squareSize = 16;//adjustSquareToResolution();
+	unsigned short squareSize = adjustSquareToResolution();
 	adjustWindowSize(win, squareSize);
 
 	_startPosition.x = win.getSize().x / 2 - (squareSize * width) / 2;
