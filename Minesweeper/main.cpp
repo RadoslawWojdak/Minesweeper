@@ -56,6 +56,19 @@ int main()
 			if (!gameOver)
 				board.checkMouse(mainWindow, mButtonReleased, timer, gameOver);
 
+			tUnflaggedBombs.setString(board.getBombs() - board.countFlaggedBombs());
+
+			//Graphics
+			mainWindow.clear(sf::Color(191, 191, 191));
+
+			board.display(mainWindow);
+			restartButton.display(mainWindow);
+			timer.display(mainWindow);
+			mainWindow.draw(tUnflaggedBombs);
+
+			mainWindow.display();
+
+			//After the clicked bomb displaying
 			if (board.isGameOver() && !winLoseDisplayed)
 			{
 				gameOver = true;
@@ -70,18 +83,6 @@ int main()
 				cMessageBox gameEndingMBox("GAME OVER", mBoxDescription);
 				winLoseDisplayed = true;
 			}
-
-			tUnflaggedBombs.setString(board.getBombs() - board.countFlaggedBombs());
-
-			//Graphics
-			mainWindow.clear(sf::Color(191, 191, 191));
-
-			board.display(mainWindow);
-			restartButton.display(mainWindow);
-			timer.display(mainWindow);
-			mainWindow.draw(tUnflaggedBombs);
-
-			mainWindow.display();
 		}
 	}
 
