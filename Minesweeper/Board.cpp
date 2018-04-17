@@ -291,8 +291,8 @@ sf::Vector2i cBoard::getMouseSquare(sf::RenderWindow &win)
 {
 	sf::Vector2i mp = sf::Mouse::getPosition(win);
 	sf::Vector2i selectedSquare;
-	selectedSquare.x = (mp.x - _startPosition.x) / _square[0].getSize().x;
-	selectedSquare.y = (mp.y - _startPosition.y) / _square[0].getSize().y;
+	selectedSquare.x = std::floor((float)(mp.x - _startPosition.x) / _square[0].getSize().x);
+	selectedSquare.y = std::floor((float)(mp.y - _startPosition.y) / _square[0].getSize().y);
 
 	if (selectedSquare.x < 0 || selectedSquare.x > _width - 1)
 		selectedSquare.x = -1;
