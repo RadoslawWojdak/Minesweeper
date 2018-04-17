@@ -1,7 +1,7 @@
 #include "Board.h"
 
 #include <ctime>
-#include <iostream>
+#include "MessageBox.h"
 
 bool* cBoard::_squareChecked;
 
@@ -26,10 +26,7 @@ void cBoard::randomizeBombs(unsigned short clickX, unsigned short clickY)
 		randBombs(clickX, clickY);
 	else	//Delete when the GUI is added
 	{
-#ifdef _DEBUG
-		std::cerr << "ERROR: The number of bombs is greater than or equal to the size of the cBoard!\n";
-		system("PAUSE");
-#endif
+		cMessageBox errorMBox("Error 1", "The number of bombs is greater than or equal to the size of the cBoard!");
 		deletePointers();
 		exit(1);
 	}

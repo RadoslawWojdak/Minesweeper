@@ -29,7 +29,7 @@ bool cText::init()
 void cText::setOriginInCenter()
 {
 	sf::FloatRect textRect = getLocalBounds();
-	this->setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	this->setOrigin((int)(textRect.left + textRect.width / 2.0f), (int)(textRect.top + textRect.height / 2.0f));
 }
 
 void cText::setString(int number)

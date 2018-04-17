@@ -1,22 +1,19 @@
 #include <SFML\Graphics.hpp>
-#include <iostream>
 #include "Board.h"
 #include "Timer.h"
 #include "RestartButton.h"
 #include "Text.h"
+#include "MessageBox.h"
 
 int main()
 {
-	sf::RenderWindow mainWindow(sf::VideoMode(800, 600), "Minesweeper", sf::Style::Close);
-
 	if (!cText::init())
 	{
-#ifdef _DEBUG
-		std::cerr << "ERROR: Text init failed!\n";
-		system("PAUSE");
-#endif
+		cMessageBox errorMBox("Error 2 - Text init failed!", "Text init failed!");	//The description won't displayed becauese there is no font
 		return 2;
 	}
+
+	sf::RenderWindow mainWindow(sf::VideoMode(800, 600), "Minesweeper", sf::Style::Close);
 
 	cBoard board;
 	
@@ -50,7 +47,7 @@ int main()
 				{
 					mButtonReleased = e.mouseButton.button;
 
-					if (restartButton.click(mainWindow, mButtonReleased))
+					if (restartButton.isMouseOn(mainWindow))
 						closeGame = true;
 				}
 			}
@@ -59,20 +56,19 @@ int main()
 			if (!gameOver)
 				board.checkMouse(mainWindow, mButtonReleased, timer, gameOver);
 
-			if (board.isGameOver())
+			if (board.isGameOver() && !winLoseDisplayed)
 			{
 				gameOver = true;
 				timer.pause();
-#ifdef _DEBUG
-				if (!winLoseDisplayed)
-				{
-					winLoseDisplayed = true;
-					if (board.isBombRevealed())
-						std::cout << "Defeat!\n";
-					else
-						std::cout << "Victory!\n";
-				}
-#endif
+
+				sf::String mBoxDescription;
+				if (board.isBombRevealed())
+					mBoxDescription = "Defeat!";
+				else
+					mBoxDescription = "Victory!";
+
+				cMessageBox gameEndingMBox("GAME OVER", mBoxDescription);
+				winLoseDisplayed = true;
 			}
 
 			tUnflaggedBombs.setString(board.getBombs() - board.countFlaggedBombs());
