@@ -57,6 +57,27 @@ cSquare::cSquare(unsigned short x, unsigned short y, sf::Vector2f startPos, unsi
 	_bombsNumber = cText(_square.getPosition(), "", (int)size * 0.8f, sf::Color::Black);
 }
 
+void cSquare::onMouse(sf::RenderWindow &win, bool isGameOver)
+{
+	if (_status == unrevealed || _status == questioned)
+	{
+		if (getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y) && !isGameOver)
+		{
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+				_square.setFillColor(sf::Color(196, 196, 196));
+			else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
+				_square.setFillColor(sf::Color(96, 224, 96));
+			else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+				_square.setFillColor(sf::Color(96, 96, 224));
+		}
+	}
+}
+
+void cSquare::outMouse(sf::RenderWindow &win)
+{
+	refreshStatus(0);
+}
+
 void cSquare::click(unsigned short bombsAround, sf::Mouse::Button buttonReleased)
 {
 	if (buttonReleased == sf::Mouse::Button::Left)
@@ -117,23 +138,8 @@ eStatus cSquare::getStatus()
 	return _status;
 }
 
-void cSquare::display(sf::RenderWindow &win, bool gameOver)
+void cSquare::display(sf::RenderWindow &win)
 {
-	if (_status == unrevealed || _status == questioned)
-	{
-		if (getRect().getGlobalBounds().contains(sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y) && !gameOver)
-		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-				_square.setFillColor(sf::Color(196, 196, 196));
-			else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
-				_square.setFillColor(sf::Color(96, 224, 96));
-			else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
-				_square.setFillColor(sf::Color(96, 96, 224));
-		}
-		else
-			refreshStatus(0);
-	}
-
 	win.draw(_square);
 	win.draw(_bombsNumber);
 }

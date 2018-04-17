@@ -2,8 +2,11 @@
 
 #include <SFML\Graphics.hpp>
 #include "Text.h"
+#include "Board.h"
 
 enum eStatus { unrevealed, revealed, flagged, questioned };
+
+class cBoard;
 
 class cSquare
 {
@@ -14,6 +17,9 @@ class cSquare
 
 	void setBombsNumber(unsigned short bombsAround);
 	void refreshStatus(unsigned short bombsAround);
+
+	void onMouse(sf::RenderWindow &win, bool isGameOver);
+	void outMouse(sf::RenderWindow &win);
 
 public:
 
@@ -28,5 +34,7 @@ public:
 	sf::RectangleShape getRect();
 	eStatus getStatus();
 
-	void display(sf::RenderWindow &win, bool gameOver);
+	void display(sf::RenderWindow &win);
+
+	friend cBoard;
 };

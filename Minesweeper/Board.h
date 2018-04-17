@@ -3,9 +3,12 @@
 #include "Square.h"
 #include "Timer.h"
 
+class cSquare;
+
 class cBoard
 {
 	static bool* _squareChecked;	//Checks whether the square has already been checked in the autoDetecting function
+	cSquare* _lastOnMouseSquare;	//Needed to clean the color of clicked rectangle
 
 	cSquare* _square;
 	sf::Vector2f _startPosition;
@@ -32,9 +35,9 @@ public:
 	cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
 	~cBoard();
 
-	void checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer);
+	void checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer, bool isGameOver);
 	void newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
-	void display(sf::RenderWindow &win, bool gameOver);
+	void display(sf::RenderWindow &win);
 
 	unsigned int getBombs();
 	unsigned int countFlaggedBombs();

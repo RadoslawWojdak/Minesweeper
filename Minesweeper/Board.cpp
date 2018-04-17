@@ -195,6 +195,7 @@ void cBoard::deletePointers()
 		delete[] _squareChecked;
 		_squareChecked = NULL;
 	}
+	_lastOnMouseSquare = NULL;
 }
 
 cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
@@ -207,26 +208,42 @@ cBoard::~cBoard()
 	deletePointers();
 }
 
-void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer)
+void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer, bool isGameOver)
 {
-	if (buttonReleased == sf::Mouse::Left || buttonReleased == sf::Mouse::Middle || buttonReleased == sf::Mouse::Right)
+	sf::Vector2i selectedSquare = getMouseSquare(win);
+	if (_square != NULL && (selectedSquare.x != -1 && selectedSquare.y != -1))
 	{
-		sf::Vector2i selectedSquare = getMouseSquare(win);
+		cSquare* square = &_square[selectedSquare.x * _height + selectedSquare.y];
 
-		cSquare square = _square[selectedSquare.x * _height + selectedSquare.y];
-		eStatus status = square.getStatus();
+		if ((square->getStatus() == unrevealed || square->getStatus() == questioned) 
+			&& (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Middle) || sf::Mouse::isButtonPressed(sf::Mouse::Right)))
+		{
+			if (_lastOnMouseSquare != NULL)
+				_lastOnMouseSquare->outMouse(win);
 
-		startAutoDetecting(selectedSquare.x, selectedSquare.y, buttonReleased, timer);
+			square->onMouse(win, isGameOver);
+			_lastOnMouseSquare = square;
+		}
+		else if (buttonReleased == sf::Mouse::Left || buttonReleased == sf::Mouse::Middle || buttonReleased == sf::Mouse::Right)
+		{
+			_lastOnMouseSquare = NULL;
 
-		if (status != square.getStatus() && square.getStatus() == flagged)
-			++_flaggedBombs;
-		else if (status == flagged && square.getStatus() != flagged)
-			--_flaggedBombs;
+			eStatus status = square->getStatus();
+
+			startAutoDetecting(selectedSquare.x, selectedSquare.y, buttonReleased, timer);
+
+			if (status != square->getStatus() && square->getStatus() == flagged)
+				++_flaggedBombs;
+			else if (status == flagged && square->getStatus() != flagged)
+				--_flaggedBombs;
+		}
 	}
 }
 
 void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
 {
+	deletePointers();
+
 	_width = width;
 	_height = height;
 	_size = width * height;
@@ -236,11 +253,10 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short
 	_gameOver = false;
 	_firstClick = false;
 
-	deletePointers();
 	_square = new cSquare[_size];
 	_squareChecked = new bool[_size];
 
-	unsigned short squareSize = adjustSquareToResolution();
+	unsigned short squareSize = 16;//adjustSquareToResolution();
 	adjustWindowSize(win, squareSize);
 
 	_startPosition.x = win.getSize().x / 2 - (squareSize * width) / 2;
@@ -254,11 +270,11 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short
 	}
 }
 
-void cBoard::display(sf::RenderWindow &win, bool gameOver)
+void cBoard::display(sf::RenderWindow &win)
 {
 	cSquare* p = _square;
 	for (int i = 0; i < _size; ++i)
-		p++->display(win, gameOver);
+		p++->display(win);
 }
 
 unsigned int cBoard::getBombs()
@@ -277,6 +293,11 @@ sf::Vector2i cBoard::getMouseSquare(sf::RenderWindow &win)
 	sf::Vector2i selectedSquare;
 	selectedSquare.x = (mp.x - _startPosition.x) / _square[0].getSize().x;
 	selectedSquare.y = (mp.y - _startPosition.y) / _square[0].getSize().y;
+
+	if (selectedSquare.x < 0 || selectedSquare.x > _width - 1)
+		selectedSquare.x = -1;
+	if (selectedSquare.y < 0 || selectedSquare.y > _height - 1)
+		selectedSquare.y = -1;
 
 	return selectedSquare;
 }

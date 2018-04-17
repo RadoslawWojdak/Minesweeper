@@ -36,6 +36,7 @@ int main()
 		
 		while (!closeGame)
 		{
+			sf::Mouse::Button mButtonReleased = sf::Mouse::Button::ButtonCount;	//Whatever is not left, middle or right
 			//Events
 			sf::Event e;
 			while (mainWindow.pollEvent(e))
@@ -47,16 +48,17 @@ int main()
 				}
 				if (e.type == sf::Event::MouseButtonReleased)
 				{
-					sf::Mouse::Button mButton = e.mouseButton.button;
+					mButtonReleased = e.mouseButton.button;
 
-					if (!gameOver)
-						board.checkMouse(mainWindow, mButton, timer);
-					if (restartButton.click(mainWindow, mButton))
+					if (restartButton.click(mainWindow, mButtonReleased))
 						closeGame = true;
 				}
 			}
 
 			//Actions
+			if (!gameOver)
+				board.checkMouse(mainWindow, mButtonReleased, timer, gameOver);
+
 			if (board.isGameOver())
 			{
 				gameOver = true;
@@ -78,7 +80,7 @@ int main()
 			//Graphics
 			mainWindow.clear(sf::Color(191, 191, 191));
 
-			board.display(mainWindow, gameOver);
+			board.display(mainWindow);
 			restartButton.display(mainWindow);
 			timer.display(mainWindow);
 			mainWindow.draw(tUnflaggedBombs);
