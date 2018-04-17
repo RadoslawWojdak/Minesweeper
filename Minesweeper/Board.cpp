@@ -215,7 +215,7 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 	{
 		cSquare* square = &_square[selectedSquare.x * _height + selectedSquare.y];
 
-		if ((square->getStatus() == unrevealed || square->getStatus() == questioned) 
+		if ((square->getStatus() == unrevealed || square->getStatus() == questioned)
 			&& (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Middle) || sf::Mouse::isButtonPressed(sf::Mouse::Right)))
 		{
 			if (_lastOnMouseSquare != NULL)
@@ -238,6 +238,8 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 				--_flaggedBombs;
 		}
 	}
+	else if (_lastOnMouseSquare != NULL)	//When the cursor is out of the board, selection of square disappears
+		_lastOnMouseSquare->outMouse(win);
 }
 
 void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
