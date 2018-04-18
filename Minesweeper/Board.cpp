@@ -12,8 +12,6 @@ void cBoard::randBombs(unsigned int clickX, unsigned int clickY)
 	for (unsigned int i = 0; i < _bombs;)
 	{
 		unsigned int rnd = rand() % _size;
-		//if (rnd != clickX * _height + clickY)
-		//rnd = _size - i;
 		if (!_square[rnd].getBomb() && (clickX * _height + clickY != rnd))
 		{
 			_square[rnd].setBomb();
@@ -236,6 +234,11 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 				++_flaggedBombs;
 			else if (status == flagged && square->getStatus() != flagged)
 				--_flaggedBombs;
+		}
+		else if (square->getStatus() != unrevealed && square->getStatus() != questioned)
+		{
+			if (_lastOnMouseSquare != NULL)
+				_lastOnMouseSquare->outMouse(win);
 		}
 	}
 	else if (_lastOnMouseSquare != NULL)	//When the cursor is out of the board, selection of square disappears
