@@ -28,7 +28,7 @@ void cBoard::randomizeBombs(unsigned int clickX, unsigned int clickY)
 		randBombs(clickX, clickY);
 	else
 	{
-		cMessageBox errorMBox("Error 1", "The number of bombs is greater than or equal to the size of the board size!");
+		cMessageBox errorMBox("Error 1", "The number of bombs is greater than or equal to the size of the board!");
 		errorMBox.show();
 		deletePointers();
 		exit(1);

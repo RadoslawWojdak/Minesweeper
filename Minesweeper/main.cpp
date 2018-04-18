@@ -40,7 +40,7 @@ int main()
 				bombsFits = true;
 			else
 			{
-				cMessageBox errorMBox("Error", "The number of bombs is greater than or equal to the size of the board size!");
+				cMessageBox errorMBox("Error", "The number of bombs is greater than or equal to the size of the board!");
 				errorMBox.show();
 			}
 		}
