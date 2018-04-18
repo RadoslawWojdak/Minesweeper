@@ -26,9 +26,9 @@ void cBoard::randomizeBombs(unsigned int clickX, unsigned int clickY)
 {
 	if (_width * _height > _bombs)
 		randBombs(clickX, clickY);
-	else	//Delete when the GUI is added
+	else
 	{
-		cMessageBox errorMBox("Error 1", "The number of bombs is greater than or equal to the size of the cBoard!");
+		cMessageBox errorMBox("Error 1", "The number of bombs is greater than or equal to the size of the board size!");
 		errorMBox.show();
 		deletePointers();
 		exit(1);

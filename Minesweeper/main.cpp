@@ -20,10 +20,33 @@ int main()
 	
 	while (mainWindow.isOpen())
 	{
-		cMessageBox sizeMBox("Board size", "Enter the board data", MB_3TEXTBOXES, { "Width", "Height", "Bombs" });
-		unsigned short* size = sizeMBox.show().textBox;
+		struct
+		{
+			unsigned int width, height;
+			unsigned int bombs;
+		} boardData;
 
-		board.newGame(mainWindow, size[0], size[1], size[2]);
+		bool bombsFits = false;
+		while (!bombsFits)
+		{
+			cMessageBox sizeMBox("Board size", "Enter the board data", MB_3TEXTBOXES, { "Width", "Height", "Bombs" });
+			unsigned short* data = sizeMBox.show().textBox;
+			
+			boardData.width = data[0];
+			boardData.height = data[1];
+			boardData.bombs = data[2];
+
+			if (boardData.width * boardData.height > boardData.bombs)
+				bombsFits = true;
+			else
+			{
+				cMessageBox errorMBox("Error", "The number of bombs is greater than or equal to the size of the board size!");
+				errorMBox.show();
+			}
+		}
+
+
+		board.newGame(mainWindow, boardData.width, boardData.height, boardData.bombs);
 
 		cTimer timer(mainWindow);
 		cRestartButton restartButton(sf::Vector2f(mainWindow.getSize().x / 2, 16), 24);
