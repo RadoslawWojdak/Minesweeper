@@ -5,13 +5,15 @@
 
 bool* cBoard::_squareChecked;
 
-void cBoard::randBombs(unsigned short clickX, unsigned short clickY)
+void cBoard::randBombs(unsigned int clickX, unsigned int clickY)
 {
 	srand(time(NULL));
 
-	for (unsigned short i = 0; i < _bombs;)
+	for (unsigned int i = 0; i < _bombs;)
 	{
-		int rnd = rand() % _size;
+		unsigned int rnd = rand() % _size;
+		//if (rnd != clickX * _height + clickY)
+		//rnd = _size - i;
 		if (!_square[rnd].getBomb() && (clickX * _height + clickY != rnd))
 		{
 			_square[rnd].setBomb();
@@ -20,7 +22,7 @@ void cBoard::randBombs(unsigned short clickX, unsigned short clickY)
 	}
 }
 
-void cBoard::randomizeBombs(unsigned short clickX, unsigned short clickY)
+void cBoard::randomizeBombs(unsigned int clickX, unsigned int clickY)
 {
 	if (_width * _height > _bombs)
 		randBombs(clickX, clickY);
@@ -33,7 +35,7 @@ void cBoard::randomizeBombs(unsigned short clickX, unsigned short clickY)
 	}
 }
 
-unsigned short cBoard::countBombsAround(unsigned short x, unsigned short y)
+unsigned short cBoard::countBombsAround(unsigned int x, unsigned int y)
 {
 	int sum = 0;
 
@@ -63,7 +65,7 @@ unsigned short cBoard::countBombsAround(unsigned short x, unsigned short y)
 	return sum;
 }
 
-void cBoard::startAutoDetecting(unsigned short x, unsigned short y, sf::Mouse::Button buttonReleased, cTimer &timer)
+void cBoard::startAutoDetecting(unsigned int x, unsigned int y, sf::Mouse::Button buttonReleased, cTimer &timer)
 {
 	if (!buttonReleased == sf::Mouse::Button::Left)
 	{
@@ -101,7 +103,7 @@ void cBoard::startAutoDetecting(unsigned short x, unsigned short y, sf::Mouse::B
 		_gameOver = true;
 }
 
-void cBoard::autoDetecting(unsigned short x, unsigned short y)
+void cBoard::autoDetecting(unsigned int x, unsigned int y)
 {
 	if (!_squareChecked[x * _height + y] && (_square[x * _height + y].getStatus() == unrevealed || _square[x * _height + y].getStatus() == questioned))
 	{
@@ -196,7 +198,7 @@ void cBoard::deletePointers()
 	_lastOnMouseSquare = NULL;
 }
 
-cBoard::cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
+cBoard::cBoard(sf::RenderWindow &win, unsigned int width, unsigned int height, unsigned int bombs)
 {
 	newGame(win, width, height, bombs);
 }
@@ -240,7 +242,7 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 		_lastOnMouseSquare->outMouse(win);
 }
 
-void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs)
+void cBoard::newGame(sf::RenderWindow &win, unsigned int width, unsigned int height, unsigned int bombs)
 {
 	deletePointers();
 
@@ -263,9 +265,9 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned short width, unsigned short
 	_startPosition.y = 32;
 
 	cSquare* p = _square;
-	for (unsigned short i = 0; i < width; ++i)
+	for (unsigned int i = 0; i < width; ++i)
 	{
-		for (unsigned short j = 0; j < height; ++j)
+		for (unsigned int j = 0; j < height; ++j)
 			*p++ = cSquare(i, j, _startPosition, squareSize);
 	}
 }

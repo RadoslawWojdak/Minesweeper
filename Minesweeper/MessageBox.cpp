@@ -35,6 +35,9 @@ sf::Vector2u cMessageBox::countSize()
 	if (_type == MB_3TEXTBOXES)
 		size.y += 32;
 
+	if (size.x < _description.getGlobalBounds().width + 24)
+		size.x = _description.getGlobalBounds().width + 24;
+
 	return size;
 }
 
@@ -55,16 +58,17 @@ uThrownData cMessageBox::throwData()
 }
 
 cMessageBox::cMessageBox(const sf::String &title, const sf::String &description, eMBType type, const std::vector <sf::String> &textBoxString)
-	: _type(type), sf::RenderWindow(sf::VideoMode(countSize().x, countSize().y), title, sf::Style::Titlebar)
+	: _type(type)
 {
-	if (countSize() != this->getSize())	//countSize() doesn't work correctly in initialization list
+	_description = cText(sf::Vector2f(12, 12), description, 16);
+	_description.setOrigin(0, 0);
+
+	if (countSize() != this->getSize())
 	{
 		this->close();
 		this->create(sf::VideoMode(countSize().x, countSize().y), title, sf::Style::Titlebar);
 	}
 
-	_description = cText(sf::Vector2f(12, 12), description, 16);
-	_description.setOrigin(0, 0);
 	_OKButton = cButton("OK", sf::Vector2f(this->getSize().x / 2, this->getSize().y - 32), sf::Vector2f(64, 24));
 
 	if (type == MB_3TEXTBOXES)

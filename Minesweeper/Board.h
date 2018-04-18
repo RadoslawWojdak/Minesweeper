@@ -13,17 +13,17 @@ class cBoard
 	cSquare* _square;
 	sf::Vector2f _startPosition;
 	unsigned int _size;
-	unsigned short _width, _height;
+	unsigned int _width, _height;
 	unsigned int _bombs;
 	unsigned int _flaggedBombs;
 	bool _hitBomb, _gameOver;
 	bool _firstClick;
 
-	void randBombs(unsigned short clickX, unsigned short clickY);
-	void randomizeBombs(unsigned short clickX, unsigned short clickY);
-	unsigned short countBombsAround(unsigned short x, unsigned short y);
-	void startAutoDetecting(unsigned short x, unsigned short y, sf::Mouse::Button buttonReleased, cTimer &timer);
-	void autoDetecting(unsigned short x, unsigned short y);
+	void randBombs(unsigned int clickX, unsigned int clickY);
+	void randomizeBombs(unsigned int clickX, unsigned int clickY);
+	unsigned short countBombsAround(unsigned int x, unsigned int y);
+	void startAutoDetecting(unsigned int x, unsigned int y, sf::Mouse::Button buttonReleased, cTimer &timer);
+	void autoDetecting(unsigned int x, unsigned int y);
 	unsigned int countCheckedSquares();
 	void clearSquareChecked();
 	void adjustWindowSize(sf::RenderWindow &win, unsigned short squareSize);
@@ -32,11 +32,11 @@ class cBoard
 
 public:
 	cBoard() {};
-	cBoard(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
+	cBoard(sf::RenderWindow &win, unsigned int width, unsigned int height, unsigned int bombs);
 	~cBoard();
 
 	void checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased, cTimer &timer, bool isGameOver);
-	void newGame(sf::RenderWindow &win, unsigned short width, unsigned short height, unsigned short bombs);
+	void newGame(sf::RenderWindow &win, unsigned int width, unsigned int height, unsigned int bombs);
 	void display(sf::RenderWindow &win);
 
 	unsigned int getBombs();
