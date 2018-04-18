@@ -41,6 +41,21 @@ void cTextBox::putSign(const sf::Keyboard::Key &key)
 	}
 }
 
+void cTextBox::setString(const sf::String &string)
+{
+	_text.setString(string);
+}
+
+sf::Color cTextBox::getTextColor()
+{
+	return _text.getFillColor();
+}
+
+void cTextBox::setTextColor(const sf::Color &col)
+{
+	_text.setFillColor(col);
+}
+
 bool cTextBox::isMouseOn(sf::RenderWindow &win)
 {
 	return _rect.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(win)));

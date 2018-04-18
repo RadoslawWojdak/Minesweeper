@@ -7,9 +7,21 @@ void cMessageBox::display()
 	_OKButton.display(*this);
 	if (_type == MB_3TEXTBOXES)
 	{
-		_textBox[0].display(*this);
-		_textBox[1].display(*this);
-		_textBox[2].display(*this);
+		for (int i = 0; i < 3; ++i)
+		{
+			if (_textBox[i].getText().getString().getSize() == 0 && _textBoxString.size() > i)
+			{
+				sf::Color col = _textBox[i].getTextColor();
+
+				_textBox[i].setString(_textBoxString[i]);
+				_textBox[i].setTextColor(sf::Color(164, 164, 164));
+				_textBox[i].display(*this);
+				_textBox[i].setTextColor(col);
+				_textBox[i].setString("");
+			}
+			else
+				_textBox[i].display(*this);
+		}
 	}
 	this->draw(_description);
 
@@ -42,7 +54,7 @@ uThrownData cMessageBox::throwData()
 	return data;
 }
 
-cMessageBox::cMessageBox(const sf::String &title, const sf::String &description, eMBType type) 
+cMessageBox::cMessageBox(const sf::String &title, const sf::String &description, eMBType type, const std::vector <sf::String> &textBoxString)
 	: _type(type), sf::RenderWindow(sf::VideoMode(countSize().x, countSize().y), title, sf::Style::Titlebar)
 {
 	if (countSize() != this->getSize())	//countSize() doesn't work correctly in initialization list
@@ -61,6 +73,7 @@ cMessageBox::cMessageBox(const sf::String &title, const sf::String &description,
 		_textBox[1] = cTextBox(sf::Vector2f(this->getSize().x / 2, this->getSize().y - 72), sf::Vector2f(64, 24), true, 5);
 		_textBox[2] = cTextBox(sf::Vector2f(this->getSize().x / 2 + 80, this->getSize().y - 72), sf::Vector2f(64, 24), true, 5);
 	}
+	_textBoxString = textBoxString;
 }
 
 uThrownData cMessageBox::show()

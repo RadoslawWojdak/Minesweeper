@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
+#include <vector>
 #include "Text.h"
 #include "Button.h"
 #include "TextBox.h"
@@ -22,6 +23,7 @@ class cMessageBox :public sf::RenderWindow
 	cText _description;
 	cButton _OKButton;
 	cTextBox _textBox[TEXTBOXES];
+	std::vector <sf::String> _textBoxString;
 
 	void display();
 	sf::Vector2u countSize();
@@ -29,7 +31,7 @@ class cMessageBox :public sf::RenderWindow
 	uThrownData throwData();
 
 public:
-	cMessageBox(const sf::String &title = "", const sf::String &description = "", eMBType type = MB_OK);
+	cMessageBox(const sf::String &title = "", const sf::String &description = "", eMBType type = MB_OK, const std::vector <sf::String> &textBoxString = {});
 
 	uThrownData show();
 };

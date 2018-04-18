@@ -20,7 +20,7 @@ int main()
 	
 	while (mainWindow.isOpen())
 	{
-		cMessageBox sizeMBox("Board size", "Enter the size of the board", MB_3TEXTBOXES);
+		cMessageBox sizeMBox("Board size", "Enter the board data", MB_3TEXTBOXES, { "Width", "Height", "Bombs" });
 		unsigned short* size = sizeMBox.show().textBox;
 
 		board.newGame(mainWindow, size[0], size[1], size[2]);
