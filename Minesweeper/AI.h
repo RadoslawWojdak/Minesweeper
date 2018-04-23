@@ -27,6 +27,7 @@ class cAI
 	unsigned short countBombsAround(unsigned int x, unsigned int y, bool* isBomb);
 	unsigned short countEmptiesAround(unsigned int x, unsigned int y);
 	bool isNextToRevealed(unsigned int x, unsigned int y);
+	void findBombs(short *bombs, bool *isBomb);
 	void addBombs(unsigned int x, unsigned int y, short *bombs, bool* isBomb);
 	bool isNotBomb(unsigned int x, unsigned int y, short* bombs, bool* isBomb);
 

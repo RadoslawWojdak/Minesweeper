@@ -27,11 +27,16 @@ cAI &cAI::getAI()
 
 cSquare* cAI::randomEmptySquare()
 {
+	unsigned int gridSize = _gridWidth * _gridHeight;
+	short* bombs = new short[gridSize];
+	bool* isBomb = new bool[gridSize];
+	findBombs(bombs, isBomb);
+
 	for (;;)
 	{
 		unsigned int random = rand() % (_gridWidth * _gridHeight);
-		
-		if (_squareGrid[random].getStatus() != revealed)
+
+		if (_squareGrid[random].getStatus() != revealed && !isBomb[random])
 			return &(_squareGrid[random]);
 	}
 }
@@ -91,6 +96,30 @@ bool cAI::isWorking()
 	return _isWorking;
 }
 
+void cAI::findBombs(short *bombs, bool *isBomb)
+{
+	unsigned int gridSize = _gridWidth * _gridHeight;
+
+	if (bombs == NULL)
+		bombs = new short[gridSize];
+	if (isBomb == NULL)
+		isBomb = new bool[gridSize];
+
+	for (unsigned int i = 0; i < gridSize; ++i)
+		bombs[i] = _squareGrid[i].getBombNumber();
+	for (int i = 0; i < gridSize; ++i)
+		isBomb[i] = false;
+
+
+	for (unsigned int i = 0; i < gridSize; ++i)
+	{
+		sf::Vector2u pos = IDToPos(i);
+
+		if (_squareGrid[i].getStatus() == revealed)
+			addBombs(pos.x, pos.y, bombs, isBomb);
+	}
+}
+
 void cAI::findSafeSquare()
 {
 	if (_isWorking)
@@ -101,19 +130,7 @@ void cAI::findSafeSquare()
 		bool *isBomb = new bool[gridSize];
 		_safeSquare.clear();
 		
-		for (unsigned int i = 0; i < gridSize; ++i)
-			bombs[i] = _squareGrid[i].getBombNumber();
-		for (int i = 0; i < gridSize; ++i)
-			isBomb[i] = false;
-
-		
-		for (unsigned int i = 0; i < gridSize; ++i)
-		{
-			sf::Vector2u pos = IDToPos(i);
-			
-			if (_squareGrid[i].getStatus() == revealed)
-				addBombs(pos.x, pos.y, bombs, isBomb);
-		}
+		findBombs(bombs, isBomb);
 
 		int safeSquares = 0;
 		for (unsigned int i = 0; i < gridSize; ++i)
