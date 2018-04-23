@@ -244,18 +244,10 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 	}
 	else if (_lastOnMouseSquare != NULL)	//When the cursor is out of the board, selection of square disappears
 		_lastOnMouseSquare->outMouse(win);
-
-	if (buttonReleased == sf::Mouse::Left)
-	{
-		cAI::getAI().findSafeSquare();
-		cAI::getAI().paintSafeSquares();
-	}
 }
 
 void cBoard::newGame(sf::RenderWindow &win, unsigned int width, unsigned int height, unsigned int bombs)
 {
-	deletePointers();
-
 	_width = width;
 	_height = height;
 	_size = width * height;

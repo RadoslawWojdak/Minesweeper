@@ -49,13 +49,17 @@ int main()
 		board.newGame(mainWindow, boardData.width, boardData.height, boardData.bombs);
 
 		cTimer timer(mainWindow);
-		cButton restartButton("R", sf::Vector2f(mainWindow.getSize().x / 2 - 22, 16), sf::Vector2f(24, 24));
-		cButton AIButton("ON", sf::Vector2f(mainWindow.getSize().x / 2 + 22, 16), sf::Vector2f(48, 24));
+		cButton restartButton("R", sf::Vector2f(mainWindow.getSize().x / 2 - 0, 16), sf::Vector2f(24, 24));
+		cButton paintAIButton("ON", sf::Vector2f(mainWindow.getSize().x / 2 - 48, 16), sf::Vector2f(48, 24));
+		cButton mouseAIButton("ON", sf::Vector2f(mainWindow.getSize().x / 2 + 48, 16), sf::Vector2f(48, 24));
 		cText tUnflaggedBombs(sf::Vector2f((int)(mainWindow.getSize().x * 0.25f), 16), "0", 24, sf::Color(48, 48, 224));
 
 		bool closeGame = false;
 		bool gameOver = false;
 		bool winLoseDisplayed = false;
+		bool paintAI = false;
+		bool mouseAI = false;
+		bool allAIOff = true;
 
 		timer.restart();
 		
@@ -77,25 +81,80 @@ int main()
 
 					if (restartButton.isMouseOn(mainWindow))
 						closeGame = true;
-					if (AIButton.isMouseOn(mainWindow))
+					if (paintAIButton.isMouseOn(mainWindow))
 					{
-						if (AIButton.getString() == "ON")
+						if (paintAIButton.getString() == "ON")
 						{
-							AIButton.setString("OFF");
-							cAI::getAI().resume();
+							paintAIButton.setString("OFF");
+							paintAI = true;
 						}
 						else
 						{
-							AIButton.setString("ON");
-							cAI::getAI().pause();
+							paintAIButton.setString("ON");
+							paintAI = false;
 						}
+					}
+					if (mouseAIButton.isMouseOn(mainWindow))
+					{
+						if (mouseAIButton.getString() == "ON")
+						{
+							mouseAIButton.setString("OFF");
+							mouseAI = true;
+						}
+						else
+						{
+							mouseAIButton.setString("ON");
+							mouseAI = false;
+						}
+					}
+				}
+				if (e.type == sf::Event::KeyPressed)	//Turn off mouse AI mode
+				{
+					if (e.key.code == sf::Keyboard::Escape)
+					{
+						mouseAIButton.setString("ON");
+						mouseAI = false;
 					}
 				}
 			}
 
 			//Actions
+			if (paintAI || mouseAI)
+			{
+				if (allAIOff)
+				{
+					cAI::getAI().resume();
+					allAIOff = false;
+				}
+			}
+			else if (!allAIOff)
+			{
+				cAI::getAI().pause();
+				allAIOff = true;
+			}
+
 			if (!gameOver)
+			{
+				if (mouseAI)
+				{
+					cAI::getAI().findSafeSquare();
+
+					sf::Clock clock;
+					while (clock.getElapsedTime().asMilliseconds() < 750)
+					{
+						cAI::getAI().goToSafeSquare();
+					}
+					mButtonReleased = sf::Mouse::Left;
+				}
+
 				board.checkMouse(mainWindow, mButtonReleased, timer, gameOver);
+
+				if (paintAI && mButtonReleased == sf::Mouse::Left)
+				{
+					cAI::getAI().findSafeSquare();
+					cAI::getAI().paintSafeSquares();
+				}
+			}
 
 			tUnflaggedBombs.setString(board.getBombs() - board.countFlaggedBombs());
 
@@ -104,7 +163,8 @@ int main()
 
 			board.display(mainWindow);
 			restartButton.display(mainWindow);
-			AIButton.display(mainWindow);
+			paintAIButton.display(mainWindow);
+			mouseAIButton.display(mainWindow);
 			timer.display(mainWindow);
 			mainWindow.draw(tUnflaggedBombs);
 

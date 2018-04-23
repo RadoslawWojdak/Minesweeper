@@ -45,4 +45,5 @@ public:
 	void cleanSafeSquares();
 	
 	std::vector<cSquare*> getSafeSquares();
+	bool isWorking();
 };

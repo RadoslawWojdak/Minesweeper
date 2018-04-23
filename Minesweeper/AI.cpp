@@ -30,7 +30,7 @@ cSquare* cAI::randomEmptySquare()
 	for (;;)
 	{
 		unsigned int random = rand() % (_gridWidth * _gridHeight);
-
+		
 		if (_squareGrid[random].getStatus() != revealed)
 			return &(_squareGrid[random]);
 	}
@@ -84,6 +84,11 @@ void cAI::goToSafeSquare()
 		if (_goesToSquare != NULL)
 			sf::Mouse::setPosition(sf::Vector2i(_goesToSquare->getRect().getPosition()), *_winPointer);
 	}
+}
+
+bool cAI::isWorking()
+{
+	return _isWorking;
 }
 
 void cAI::findSafeSquare()
