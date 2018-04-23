@@ -248,10 +248,7 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 	if (buttonReleased == sf::Mouse::Left)
 	{
 		cAI::getAI().findSafeSquare();
-
-		std::vector<cSquare*> vec = cAI::getAI().getSafeSquares();
-		for (int i = 0; i < vec.size(); i++)
-			vec[i]->setColor(sf::Color(160, 255, 255));
+		cAI::getAI().paintSafeSquares();
 	}
 }
 
@@ -285,6 +282,7 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned int width, unsigned int hei
 	}
 
 	cAI::getAI().start(win, _square, width, height);
+	cAI::getAI().pause();
 }
 
 void cBoard::display(sf::RenderWindow &win)

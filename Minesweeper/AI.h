@@ -19,7 +19,6 @@ class cAI
 	cAI();
 	cAI(const cAI &other) {};
 
-	void viewError();
 	cSquare* randomEmptySquare();
 	void firstSquare();
 	unsigned int posToID(unsigned int x, unsigned int y);
@@ -36,8 +35,14 @@ public:
 	static cAI &getAI();
 
 	void start(sf::RenderWindow &win, cSquare *squareGrid, unsigned int gridWidth, unsigned int _ridHeight);
+	void pause();
+	void resume();
+
 	void goToSafeSquare();
 	void findSafeSquare();
+
+	void paintSafeSquares(sf::Color col = sf::Color(160, 255, 255));
+	void cleanSafeSquares();
 	
 	std::vector<cSquare*> getSafeSquares();
 };

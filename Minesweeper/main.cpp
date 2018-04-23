@@ -1,9 +1,9 @@
 #include <SFML\Graphics.hpp>
 #include "Board.h"
 #include "Timer.h"
-#include "RestartButton.h"
 #include "Text.h"
 #include "MessageBox.h"
+#include "AI.h"
 
 int main()
 {
@@ -49,7 +49,8 @@ int main()
 		board.newGame(mainWindow, boardData.width, boardData.height, boardData.bombs);
 
 		cTimer timer(mainWindow);
-		cRestartButton restartButton(sf::Vector2f(mainWindow.getSize().x / 2, 16), 24);
+		cButton restartButton("R", sf::Vector2f(mainWindow.getSize().x / 2 - 22, 16), sf::Vector2f(24, 24));
+		cButton AIButton("ON", sf::Vector2f(mainWindow.getSize().x / 2 + 22, 16), sf::Vector2f(48, 24));
 		cText tUnflaggedBombs(sf::Vector2f((int)(mainWindow.getSize().x * 0.25f), 16), "0", 24, sf::Color(48, 48, 224));
 
 		bool closeGame = false;
@@ -76,6 +77,19 @@ int main()
 
 					if (restartButton.isMouseOn(mainWindow))
 						closeGame = true;
+					if (AIButton.isMouseOn(mainWindow))
+					{
+						if (AIButton.getString() == "ON")
+						{
+							AIButton.setString("OFF");
+							cAI::getAI().resume();
+						}
+						else
+						{
+							AIButton.setString("ON");
+							cAI::getAI().pause();
+						}
+					}
 				}
 			}
 
@@ -90,6 +104,7 @@ int main()
 
 			board.display(mainWindow);
 			restartButton.display(mainWindow);
+			AIButton.display(mainWindow);
 			timer.display(mainWindow);
 			mainWindow.draw(tUnflaggedBombs);
 

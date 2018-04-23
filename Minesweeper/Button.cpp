@@ -49,8 +49,20 @@ void cButton::autoColor(sf::RenderWindow &win)
 	}
 }
 
-void cButton::display(sf::RenderWindow &win)
+void cButton::display(sf::RenderWindow &win, bool adjustColor)
 {
+	if (adjustColor)
+		autoColor(win);
 	win.draw(_rect);
 	win.draw(_text);
+}
+
+sf::String cButton::getString()
+{
+	return _text.getString();
+}
+
+void cButton::setString(sf::String str)
+{
+	_text.setString(str);
 }

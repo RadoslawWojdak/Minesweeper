@@ -8,6 +8,9 @@
 
 cAI::cAI()
 {
+#ifdef _DEBUG
+	std::cout << "Message: AI has been created! Not started yet!\n";
+#endif
 	_isWorking = false;
 }
 
@@ -20,12 +23,6 @@ cAI &cAI::getAI()
 {
 	static cAI AI;
 	return AI;
-}
-
-void cAI::viewError()
-{
-	if (!_isWorking)
-		std::cerr << "Class cAI ERROR: The cAI::start function was not used!";
 }
 
 cSquare* cAI::randomEmptySquare()
@@ -47,6 +44,9 @@ void cAI::firstSquare()
 
 void cAI::start(sf::RenderWindow &win, cSquare *squareGrid, unsigned int gridWidth, unsigned int gridHeight)
 {
+#ifdef _DEBUG
+	std::cout << "Message: AI has been started!\n";
+#endif
 	_isWorking = true;
 	
 	_winPointer = &win;
@@ -58,6 +58,25 @@ void cAI::start(sf::RenderWindow &win, cSquare *squareGrid, unsigned int gridWid
 	firstSquare();
 }
 
+void cAI::pause()
+{
+#ifdef _DEBUG
+	std::cout << "Message: AI has been paused!\n";
+#endif
+	_isWorking = false;
+
+	cleanSafeSquares();
+	_safeSquare.clear();
+}
+
+void cAI::resume()
+{
+#ifdef _DEBUG
+	std::cout << "Message: AI has been resumed!\n";
+#endif
+	_isWorking = true;
+}
+
 void cAI::goToSafeSquare()
 {
 	if (_isWorking)
@@ -65,10 +84,6 @@ void cAI::goToSafeSquare()
 		if (_goesToSquare != NULL)
 			sf::Mouse::setPosition(sf::Vector2i(_goesToSquare->getRect().getPosition()), *_winPointer);
 	}
-#ifdef _DEBUG
-	else
-		viewError();
-#endif
 }
 
 void cAI::findSafeSquare()
@@ -118,16 +133,31 @@ void cAI::findSafeSquare()
 		delete[] bombs;
 		delete[] isBomb;
 	}
-#ifdef _DEBUG
-	else
-		viewError();
-#endif
 }
 
 std::vector<cSquare*> cAI::getSafeSquares()
 {
 	return _safeSquare;
 }
+
+void cAI::paintSafeSquares(sf::Color col)
+{
+	if (_isWorking && !_safeSquare.empty())
+	{
+		for (int i = 0; i < _safeSquare.size(); ++i)
+			_safeSquare[i]->setColor(sf::Color(160, 255, 255));
+	}
+}
+
+void cAI::cleanSafeSquares()
+{
+	if (!_safeSquare.empty())
+	{
+		for (int i = 0; i < _safeSquare.size(); ++i)
+			_safeSquare[i]->setColor(sf::Color::White);
+	}
+}
+
 
 unsigned int cAI::posToID(unsigned int x, unsigned int y)
 {

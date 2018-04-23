@@ -157,8 +157,6 @@ uThrownData cMessageBox::show()
 		}
 
 		//Actions
-		_OKButton.autoColor(*this);
-
 		if (_type == MB_3TEXTBOXES)
 		{
 			canClose = true;

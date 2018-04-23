@@ -17,5 +17,8 @@ public:
 	void setColor(const sf::Color &buttonColor, const sf::Color &textColor = sf::Color::Black);
 	void autoColor(sf::RenderWindow &win);
 
-	void display(sf::RenderWindow &win);
+	void display(sf::RenderWindow &win, bool adjustColor = true);
+
+	sf::String getString();
+	void setString(sf::String str);
 };
