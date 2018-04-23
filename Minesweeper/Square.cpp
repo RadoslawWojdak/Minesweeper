@@ -119,6 +119,11 @@ void cSquare::setBomb()
 	_bomb = true;
 }
 
+short cSquare::getBombNumber()
+{
+	return _bombsNumber.getNumber();
+}
+
 sf::Vector2f cSquare::getSize()
 {
 	sf::Vector2f size;
@@ -136,6 +141,11 @@ sf::RectangleShape cSquare::getRect()
 eStatus cSquare::getStatus()
 {
 	return _status;
+}
+
+void cSquare::setColor(const sf::Color &col)
+{
+	_square.setFillColor(col);
 }
 
 void cSquare::display(sf::RenderWindow &win)

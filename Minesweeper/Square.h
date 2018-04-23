@@ -30,9 +30,11 @@ public:
 
 	bool getBomb();
 	void setBomb();
+	short getBombNumber();
 	sf::Vector2f getSize();
 	sf::RectangleShape getRect();
 	eStatus getStatus();
+	void setColor(const sf::Color &col);
 
 	void display(sf::RenderWindow &win);
 

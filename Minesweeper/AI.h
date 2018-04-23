@@ -1,33 +1,42 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
+#include <vector>
 #include "Square.h"
 
 class cAI
 {
-	static sf::RenderWindow* _winPointer;
-	static bool _isWorking;
+	sf::RenderWindow* _winPointer;
+	bool _isWorking;
 
-	static cSquare* _squareGrid;
-	static unsigned int _gridWidth, _gridHeight;
+	cSquare* _squareGrid;
+	unsigned int _gridWidth, _gridHeight;
 
-	static cSquare* _safeSquare;
+	std::vector<cSquare*> _safeSquare;
+	cSquare* _goesToSquare;
+
 
 	cAI();
 	cAI(const cAI &other) {};
 
-	static void firstSquare();
-	static unsigned int posToID(sf::Vector2u pos);
-	static sf::Vector2u IDToPos(unsigned int ID);
+	void viewError();
+	void firstSquare();
+	unsigned int posToID(unsigned int x, unsigned int y);
+	unsigned int posToID(sf::Vector2u pos);
+	sf::Vector2u IDToPos(unsigned int ID);
+	unsigned short countFoundBombsAround(unsigned int x, unsigned int y, bool* isBomb);
+	unsigned short countEmptiesAround(unsigned int x, unsigned int y);
+	bool isNextToRevealed(unsigned int x, unsigned int y);
+	void addBombs(unsigned int x, unsigned int y, short *bombs, bool* isBomb);
+	bool isNotBomb(unsigned int x, unsigned int y, short* bombs, bool* isBomb);
 
 public:
 	~cAI();
 	static cAI &getAI();
 
-	static void start(sf::RenderWindow &win, cSquare *squareGrid, unsigned int gridWidth, unsigned int _ridHeight);
-	static void goToSquare();
-	static void findSafeSquare();
-	static void findBomb();
+	void start(sf::RenderWindow &win, cSquare *squareGrid, unsigned int gridWidth, unsigned int _ridHeight);
+	void goToSafeSquare();
+	void findSafeSquare();
 	
-	cSquare* getSafeSquare();
+	std::vector<cSquare*> getSafeSquares();
 };

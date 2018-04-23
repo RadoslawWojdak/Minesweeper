@@ -2,6 +2,7 @@
 
 #include <ctime>
 #include "MessageBox.h"
+#include "AI.h"
 
 bool* cBoard::_squareChecked;
 
@@ -243,6 +244,15 @@ void cBoard::checkMouse(sf::RenderWindow &win, sf::Mouse::Button buttonReleased,
 	}
 	else if (_lastOnMouseSquare != NULL)	//When the cursor is out of the board, selection of square disappears
 		_lastOnMouseSquare->outMouse(win);
+
+	if (buttonReleased == sf::Mouse::Left)
+	{
+		cAI::getAI().findSafeSquare();
+
+		std::vector<cSquare*> vec = cAI::getAI().getSafeSquares();
+		for (int i = 0; i < vec.size(); i++)
+			vec[i]->setColor(sf::Color(160, 255, 255));
+	}
 }
 
 void cBoard::newGame(sf::RenderWindow &win, unsigned int width, unsigned int height, unsigned int bombs)
@@ -273,6 +283,8 @@ void cBoard::newGame(sf::RenderWindow &win, unsigned int width, unsigned int hei
 		for (unsigned int j = 0; j < height; ++j)
 			*p++ = cSquare(i, j, _startPosition, squareSize);
 	}
+
+	cAI::getAI().start(win, _square, width, height);
 }
 
 void cBoard::display(sf::RenderWindow &win)
