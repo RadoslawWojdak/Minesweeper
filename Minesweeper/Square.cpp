@@ -121,6 +121,8 @@ void cSquare::setBomb()
 
 short cSquare::getBombNumber()
 {
+	if (getStatus() != revealed)
+		return -1;
 	return _bombsNumber.getNumber();
 }
 

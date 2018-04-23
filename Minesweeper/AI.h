@@ -20,11 +20,12 @@ class cAI
 	cAI(const cAI &other) {};
 
 	void viewError();
+	cSquare* randomEmptySquare();
 	void firstSquare();
 	unsigned int posToID(unsigned int x, unsigned int y);
 	unsigned int posToID(sf::Vector2u pos);
 	sf::Vector2u IDToPos(unsigned int ID);
-	unsigned short countFoundBombsAround(unsigned int x, unsigned int y, bool* isBomb);
+	unsigned short countBombsAround(unsigned int x, unsigned int y, bool* isBomb);
 	unsigned short countEmptiesAround(unsigned int x, unsigned int y);
 	bool isNextToRevealed(unsigned int x, unsigned int y);
 	void addBombs(unsigned int x, unsigned int y, short *bombs, bool* isBomb);
