@@ -239,14 +239,14 @@ bool cAI::isNotBomb(unsigned int x, unsigned int y, short* bombs, bool* isBomb)
 		{
 			if (x > 0)
 			{
-				if (_squareGrid[posToID(x - 1, y - 1)].getStatus() == revealed && y > 0)
+				if (y > 0 && _squareGrid[posToID(x - 1, y - 1)].getStatus() == revealed)
 				{
 					if (_squareGrid[posToID(x - 1, y - 1)].getBombNumber() == countBombsAround(x - 1, y - 1, isBomb))
 						return true;
 				}
 				if (_squareGrid[posToID(x - 1, y)].getStatus() == revealed && _squareGrid[posToID(x - 1, y)].getBombNumber() == countBombsAround(x - 1, y, isBomb))
 					return true;
-				if (_squareGrid[posToID(x - 1, y + 1)].getStatus() == revealed && y < _gridHeight - 1)
+				if (y < _gridHeight - 1 && _squareGrid[posToID(x - 1, y + 1)].getStatus() == revealed)
 				{
 					if (_squareGrid[posToID(x - 1, y + 1)].getBombNumber() == countBombsAround(x - 1, y + 1, isBomb))
 						return true;
@@ -266,14 +266,14 @@ bool cAI::isNotBomb(unsigned int x, unsigned int y, short* bombs, bool* isBomb)
 
 			if (x < _gridWidth - 1)
 			{
-				if (_squareGrid[posToID(x + 1, y - 1)].getStatus() == revealed && y > 0)
+				if (y > 0 && _squareGrid[posToID(x + 1, y - 1)].getStatus() == revealed)
 				{
 					if (_squareGrid[posToID(x + 1, y - 1)].getBombNumber() == countBombsAround(x + 1, y - 1, isBomb))
 						return true;
 				}
 				if (_squareGrid[posToID(x + 1, y)].getStatus() == revealed && _squareGrid[posToID(x + 1, y)].getBombNumber() == countBombsAround(x + 1, y, isBomb))
 					return true;
-				if (_squareGrid[posToID(x + 1, y + 1)].getStatus() == revealed && y < _gridHeight - 1)
+				if (y < _gridHeight - 1 && _squareGrid[posToID(x + 1, y + 1)].getStatus() == revealed)
 				{
 					if (_squareGrid[posToID(x + 1, y + 1)].getBombNumber() == countBombsAround(x + 1, y + 1, isBomb))
 						return true;
